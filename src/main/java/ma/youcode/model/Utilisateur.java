@@ -1,9 +1,11 @@
-package main.java.ma.youcode.model;
+package ma.youcode.model;
 
-/**
- * Utilisateur
- */
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "users")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Utilisateur {
 
-    
+
 }
