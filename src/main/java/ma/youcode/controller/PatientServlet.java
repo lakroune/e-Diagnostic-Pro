@@ -1,8 +1,7 @@
 package ma.youcode.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDate;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -10,40 +9,49 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import ma.youcode.model.Patient;
+import ma.youcode.service.PatientService;
 
 @WebServlet("/patients")
 public class PatientServlet extends HttpServlet {
+  
+    private PatientService patientService;
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        List<Patient> patients = new ArrayList<>();
+        req.setCharacterEncoding("UTF-8");
 
-        patients.add(new Patient("ismail", "ismail", "299999"));
-        patients.add(new Patient("ismail", "ismail", "299999"));
+        String idStr = req.getParameter("id");
+        String nom = req.getParameter("nom");
+        String prenom = req.getParameter("prenom");
+        String numSecu = req.getParameter("numSecu");
+        String dateNaissanceStr = req.getParameter("dateNaissance");
+        String telephone = req.getParameter("telephone");
+        String adresse = req.getParameter("adresse");
+        String mutuelle = req.getParameter("mutuelle");
 
-        request.setAttribute("patients", patients);
+        Patient patient = new Patient();
+        patient.setNom(nom);
+        patient.setPrenom(prenom);
+        patient.setNumSecuriteSociale(numSecu);
+        patient.setTelephone(telephone);
+        patient.setAdresse(adresse);
+        patient.setMutuelle(mutuelle);
 
-        request.getRequestDispatcher("/WEB-INF/views/patients.jsp")
-                .forward(request, response);
-    }
+        if (dateNaissanceStr != null && !dateNaissanceStr.trim().isEmpty()) {
+            patient.setDateNaissance(LocalDate.parse(dateNaissanceStr));
+        }
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+        if (idStr != null && !idStr.trim().isEmpty()) {
+            Long id = Long.parseLong(idStr);
+            patientService.update(id, patient);
+        } else {
+            patientService.create(patient);
+        }
 
-        String nom = request.getParameter("nom");
-        String prenom = request.getParameter("prenom");
-        String telephone = request.getParameter("telephone");
-
-        Patient patient = new Patient(nom, prenom, telephone);
-
-        response.setContentType("text/plain");
-        response.getWriter().println("Patient ajouté avec succès");
-        response.getWriter().println("Nom : " + patient.getNom());
-        response.getWriter().println("Prénom : " + patient.getPrenom());
-        response.getWriter().println("Téléphone : " + patient.getTelephone());
+        // Redirection vers la liste après enregistrement (Pattern Post-Redirect-Get)
+        resp.sendRedirect(req.getContextPath() + "/patients");
     }
 
 }
