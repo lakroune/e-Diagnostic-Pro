@@ -31,20 +31,16 @@ public class Creneau implements Serializable {
     @Enumerated(EnumType.STRING)
     private StatutCreneau statut;
 
-    // Relation : un créneau est planifié par un MedecinSpecialiste
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "medecin_specialiste_id")
     private MedecinSpecialiste medecinSpecialiste;
 
-    // Relation : un créneau peut être réservé par une DemandeTeleExpertise
     @OneToOne(mappedBy = "creneau", fetch = FetchType.LAZY)
     private DemandeTeleExpertise demandeTeleExpertise;
 
-    // Constructeur sans arguments (requis par JPA)
     public Creneau() {
     }
 
-    // Constructeur complet
     public Creneau(Long id, LocalDateTime dateHeureDebut, LocalDateTime dateHeureFin, StatutCreneau statut) {
         this.id = id;
         this.dateHeureDebut = dateHeureDebut;
@@ -52,7 +48,6 @@ public class Creneau implements Serializable {
         this.statut = statut;
     }
 
-    // Getters et Setters
     public Long getId() {
         return id;
     }

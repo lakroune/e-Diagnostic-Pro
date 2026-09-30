@@ -88,7 +88,6 @@ public class MedecinSpecialiste extends Utilisateur {
         this.creneaux = creneaux;
     }
 
-    // Méthodes d'assistance (Helper Methods)
     public void addDemandeTraitee(DemandeTeleExpertise demande) {
         demandesTraitees.add(demande);
         demande.setMedecinSpecialiste(this);

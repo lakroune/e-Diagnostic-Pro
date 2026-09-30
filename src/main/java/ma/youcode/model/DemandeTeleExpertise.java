@@ -1,10 +1,20 @@
 package ma.youcode.model;
 
-import jakarta.persistence.*;
-
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import ma.youcode.model.enums.PrioriteExpertise;
 import ma.youcode.model.enums.StatutExpertise;
 
@@ -48,12 +58,10 @@ public class DemandeTeleExpertise implements Serializable {
     @JoinColumn(name = "medecin_specialiste_id")
     private MedecinSpecialiste medecinSpecialiste;
 
-    // Relation : une demande peut réserver un Creneau
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "creneau_id")
     private Creneau creneau;
 
-    // Constructeur sans arguments (requis par JPA)
     public DemandeTeleExpertise() {
     }
 

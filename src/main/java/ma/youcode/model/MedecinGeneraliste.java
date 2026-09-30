@@ -31,7 +31,6 @@ public class MedecinGeneraliste extends Utilisateur {
         this.setRole(Role.GENERALISTE);
     }
 
-    // Constructeur complet
     public MedecinGeneraliste(Long id, String nom, String prenom, String email, String motDePasse,
             String telephone, boolean actif, String matriculeOrdre) {
         super(id, nom, prenom, email, motDePasse, telephone, Role.GENERALISTE, actif);
@@ -62,7 +61,6 @@ public class MedecinGeneraliste extends Utilisateur {
         this.demandesTeleExpertise = demandesTeleExpertise;
     }
 
-    // Méthodes d'assistance (Helper Methods) pour la gestion bidirectionnelle
     public void addConsultation(Consultation consultation) {
         consultations.add(consultation);
         consultation.setMedecinGeneraliste(this);
