@@ -50,7 +50,6 @@ public class PatientServlet extends HttpServlet {
             patientService.create(patient);
         }
 
-        // Redirection vers la liste après enregistrement (Pattern Post-Redirect-Get)
         resp.sendRedirect(req.getContextPath() + "/patients");
     }
 

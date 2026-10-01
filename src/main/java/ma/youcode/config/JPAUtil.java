@@ -21,4 +21,5 @@ public class JPAUtil {
             ENTITY_MANAGER_FACTORY.close();
         }
     }
+    
 }

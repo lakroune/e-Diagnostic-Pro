@@ -1,10 +1,18 @@
 package ma.youcode.dao;
 
-import ma.youcode.model.Patient;
 import java.util.List;
+import java.util.Optional;
+
+import ma.youcode.model.Patient;
 
 public interface PatientDAO {
-    void save(Patient patient);
+    Patient save(Patient patient);
+
+    Optional<Patient> findById(Long id);
+
+    Patient update(Patient patient);
+
+    void delete(Patient patient);
 
     List<Patient> findAll();
 }

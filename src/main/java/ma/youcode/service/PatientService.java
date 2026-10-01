@@ -1,31 +1,33 @@
 package ma.youcode.service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.PersistenceContext;
 import ma.youcode.dao.PatientDAO;
 import ma.youcode.dao.impl.PatientDAOImpl;
 import ma.youcode.model.Patient;
 
 public class PatientService {
 
-    private final PatientDAO patientDAO = new PatientDAOImpl();
-    @PersistenceContext
-    private EntityManager em;
+    private final PatientDAO patientDAO;
+
+    public PatientService() {
+        this.patientDAO = new PatientDAOImpl();
+    }
+
+    public PatientService(PatientDAO patientDAO) {
+        this.patientDAO = patientDAO;
+    }
 
     public Patient create(Patient patient) {
         patient.setDateEnregistrement(LocalDateTime.now());
-        em.persist(patient);
-        return patient;
+        return patientDAO.save(patient);
     }
 
     public Patient update(Long id, Patient patientDetails) {
-        Patient exist = em.find(Patient.class, id);
-        if (exist == null) {
-            throw new EntityNotFoundException("Patient non trouvé avec l'ID : " + id);
-        }
+        Patient exist = patientDAO.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Patient non trouve : " + id));
 
         exist.setNom(patientDetails.getNom());
         exist.setPrenom(patientDetails.getPrenom());
@@ -39,14 +41,17 @@ public class PatientService {
         exist.setTraitementsEnCours(patientDetails.getTraitementsEnCours());
         exist.setEnAttente(patientDetails.isEnAttente());
 
-        return em.merge(exist);
+        return patientDAO.update(exist);
+    }
+
+    public Optional<Patient> findById(long id) {
+        return patientDAO.findById(id);
+
     }
 
     public void delete(Long id) {
-        Patient patient = em.find(Patient.class, id);
-        if (patient != null) {
-            em.remove(patient);
-        }
+        Patient patient = patientDAO.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Patient non trouvé avec l'ID : " + id));
+        patientDAO.delete(patient);
     }
-
 }
