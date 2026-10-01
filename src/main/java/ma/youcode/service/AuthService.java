@@ -15,7 +15,7 @@ public class AuthService {
 
         user.setActif(true);
 
-        return authDAO.save(user);
+        return authDAO.register(user).get();
     }
 
     public Utilisateur login(String email, String password) throws Exception {
