@@ -13,7 +13,7 @@ import jakarta.persistence.Table;
 import ma.youcode.model.enums.Role;
 
 @Entity
-@Table(name = "medecins_generalistes")
+@Table(name = "medecins_generalistes") 
 @PrimaryKeyJoinColumn(name = "id")
 public class MedecinGeneraliste extends Utilisateur {
 
