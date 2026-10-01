@@ -44,8 +44,6 @@ public class MedecinGeneralisteDAOImpl implements MedecinGeneralisteDAO {
         }
     }
 
-
-     
     @Override
     public MedecinGeneraliste update(MedecinGeneraliste medecin) {
         EntityManager em = JPAUtil.getEntityManager();

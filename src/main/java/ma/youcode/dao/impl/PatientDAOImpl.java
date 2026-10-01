@@ -4,45 +4,96 @@ import java.util.List;
 import java.util.Optional;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.EntityTransaction;
+import ma.youcode.config.JPAUtil;
 import ma.youcode.dao.PatientDAO;
 import ma.youcode.model.Patient;
 
 public class PatientDAOImpl implements PatientDAO {
 
-    @PersistenceContext
-    private EntityManager em;
-
     public PatientDAOImpl() {
-    }
-
-    public PatientDAOImpl(EntityManager em) {
-        this.em = em;
     }
 
     @Override
     public Patient save(Patient patient) {
-        em.persist(patient);
-        return patient;
+        EntityManager em = JPAUtil.getEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+            em.persist(patient);
+            tx.commit();
+            return patient;
+        } catch (Exception e) {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+            return null;
+        } finally {
+            em.close();
+        }
     }
 
     @Override
     public Optional<Patient> findById(Long id) {
-        return Optional.ofNullable(em.find(Patient.class, id));
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            Patient p = em.find(Patient.class, id);
+            return Optional.ofNullable(p);
+        } catch (Exception e) {
+            return Optional.empty();
+        } finally {
+            em.close();
+        }
     }
 
     @Override
     public Patient update(Patient patient) {
-        return em.merge(patient);
+        EntityManager em = JPAUtil.getEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+            Patient pmPatient = em.merge(patient);
+            tx.commit();
+            return pmPatient;
+        } catch (Exception e) {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+            return null;
+        } finally {
+            em.close();
+        }
     }
 
     @Override
     public void delete(Patient patient) {
-        em.remove(patient);
+        EntityManager em = JPAUtil.getEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+            Patient managedPatient = em.contains(patient) ? patient : em.merge(patient);
+            em.remove(managedPatient);
+            tx.commit();
+        } catch (Exception e) {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
     }
 
     @Override
     public List<Patient> findAll() {
-        return em.createQuery("SELECT p FROM Patient p", Patient.class).getResultList();
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            return em.createQuery("SELECT p FROM Patient p", Patient.class)
+                    .getResultList();
+        } finally {
+            em.close();
+        }
     }
 }
