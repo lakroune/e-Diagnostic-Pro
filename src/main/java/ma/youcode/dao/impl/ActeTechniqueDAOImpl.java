@@ -9,7 +9,6 @@ import ma.youcode.config.JPAUtil;
 import ma.youcode.dao.ActeTechniqueDAO;
 import ma.youcode.model.ActeTechnique;
 
-
 public class ActeTechniqueDAOImpl implements ActeTechniqueDAO {
 
     @Override
@@ -64,18 +63,20 @@ public class ActeTechniqueDAOImpl implements ActeTechniqueDAO {
     }
 
     @Override
-    public void delete(ActeTechnique acteTechnique) {
+    public boolean delete(ActeTechnique acteTechnique) {
         EntityManager em = JPAUtil.getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
             em.remove(acteTechnique);
             tx.commit();
+            return true;
         } catch (Exception e) {
             if (tx.isActive()) {
                 tx.rollback();
             }
             e.printStackTrace();
+            return false;
         } finally {
             em.close();
         }
@@ -86,7 +87,7 @@ public class ActeTechniqueDAOImpl implements ActeTechniqueDAO {
         EntityManager em = JPAUtil.getEntityManager();
         try {
             return em.createQuery("SELECT a FROM ActeTechnique a", ActeTechnique.class)
-                     .getResultList();
+                    .getResultList();
         } finally {
             em.close();
         }

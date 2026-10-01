@@ -13,7 +13,7 @@ public interface CreneauDAO {
 
     Creneau update(Creneau Creneau);
 
-    void delete(Creneau Creneau);
+    boolean delete(Creneau Creneau);
 
     List<Creneau> findAll();
 }

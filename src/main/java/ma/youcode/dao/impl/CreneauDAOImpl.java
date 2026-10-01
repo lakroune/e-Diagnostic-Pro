@@ -72,18 +72,20 @@ public class CreneauDAOImpl implements CreneauDAO {
     }
 
     @Override
-    public void delete(Creneau creneau) {
+    public boolean delete(Creneau creneau) {
         EntityManager em = JPAUtil.getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
             em.remove(creneau);
             tx.commit();
+            return true;
         } catch (Exception e) {
             if (tx.isActive()) {
                 tx.rollback();
             }
             e.printStackTrace();
+            return false;
         } finally {
             em.close();
         }

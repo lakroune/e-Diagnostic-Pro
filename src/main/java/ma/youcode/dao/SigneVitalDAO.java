@@ -13,7 +13,7 @@ public interface SigneVitalDAO {
 
     SigneVital update(SigneVital i);
 
-    void delete(SigneVital i);
+    boolean delete(SigneVital i);
 
     List<SigneVital> findAll();
 }

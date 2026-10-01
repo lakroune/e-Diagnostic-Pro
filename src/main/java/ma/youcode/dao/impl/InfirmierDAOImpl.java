@@ -65,18 +65,20 @@ public class InfirmierDAOImpl implements InfirmierDAO {
     }
 
     @Override
-    public void delete(Infirmier infirmier) {
+    public boolean delete(Infirmier infirmier) {
         EntityManager em = JPAUtil.getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
             em.remove(infirmier);
             tx.commit();
+            return true;
         } catch (Exception e) {
             if (tx.isActive()) {
                 tx.rollback();
             }
             e.printStackTrace();
+            return false;
         } finally {
             em.close();
         }

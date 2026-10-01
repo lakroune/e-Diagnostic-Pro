@@ -13,7 +13,7 @@ public interface UtilisateurDAO {
 
     Utilisateur update(Utilisateur i);
 
-    void delete(Utilisateur i);
+    boolean delete(Utilisateur i);
 
     List<Utilisateur> findAll();
 }

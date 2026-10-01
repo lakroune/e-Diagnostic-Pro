@@ -13,7 +13,7 @@ public interface ConsultationDAO {
 
     Consultation update(Consultation Consultation);
 
-    void delete(Consultation Consultation);
+    boolean delete(Consultation Consultation);
 
     List<Consultation> findAll();
 }

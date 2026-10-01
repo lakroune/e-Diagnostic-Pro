@@ -63,7 +63,7 @@ public class MedecinSpecialisteDAOImpl implements MedecinSpecialisteDAO {
     }
 
     @Override
-    public void delete(MedecinSpecialiste medecin) {
+    public boolean delete(MedecinSpecialiste medecin) {
         EntityManager em = JPAUtil.getEntityManager();
         EntityTransaction tx = em.getTransaction();
 
@@ -71,10 +71,13 @@ public class MedecinSpecialisteDAOImpl implements MedecinSpecialisteDAO {
             tx.begin();
             em.remove(medecin);
             tx.commit();
+            return true;
         } catch (Exception e) {
             if (tx.isActive())
                 tx.rollback();
             e.printStackTrace();
+            return false;
+
         } finally {
             em.close();
         }

@@ -63,7 +63,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
     }
 
     @Override
-    public void delete(Utilisateur utilisateur) {
+    public boolean delete(Utilisateur utilisateur) {
         EntityManager em = JPAUtil.getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
@@ -71,11 +71,14 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
             Utilisateur managedUser = em.contains(utilisateur) ? utilisateur : em.merge(utilisateur);
             em.remove(managedUser);
             tx.commit();
+            return true;
         } catch (Exception e) {
             if (tx.isActive()) {
                 tx.rollback();
             }
             e.printStackTrace();
+            return false;
+
         } finally {
             em.close();
         }

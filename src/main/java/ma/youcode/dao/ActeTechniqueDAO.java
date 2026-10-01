@@ -13,7 +13,7 @@ public interface ActeTechniqueDAO {
 
     ActeTechnique update(ActeTechnique ActeTechnique);
 
-    void delete(ActeTechnique ActeTechnique);
+    boolean delete(ActeTechnique ActeTechnique);
 
     List<ActeTechnique> findAll();
 }

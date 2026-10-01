@@ -74,18 +74,20 @@ public class SigneVitalDAOImpl implements SigneVitalDAO {
     }
 
     @Override
-    public void delete(SigneVital signeVital) {
+    public boolean delete(SigneVital signeVital) {
         EntityManager em = JPAUtil.getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
             em.remove(signeVital);
             tx.commit();
+            return true;
         } catch (Exception e) {
             if (tx.isActive()) {
                 tx.rollback();
             }
             e.printStackTrace();
+            return false;
         } finally {
             em.close();
         }

@@ -74,18 +74,20 @@ public class DemandeTeleExpertiseDAOImpl implements DemandeTeleExpertiseDAO {
     }
 
     @Override
-    public void delete(DemandeTeleExpertise demande) {
+    public boolean delete(DemandeTeleExpertise demande) {
         EntityManager em = JPAUtil.getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
             em.remove(demande);
             tx.commit();
+            return true;
         } catch (Exception e) {
             if (tx.isActive()) {
                 tx.rollback();
             }
             e.printStackTrace();
+            return false;
         } finally {
             em.close();
         }

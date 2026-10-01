@@ -13,7 +13,7 @@ public interface MedecinGeneralisteDAO {
 
     MedecinGeneraliste update(MedecinGeneraliste m);
 
-    void delete(MedecinGeneraliste m);
+    boolean delete(MedecinGeneraliste m);
 
     List<MedecinGeneraliste> findAll();
 }

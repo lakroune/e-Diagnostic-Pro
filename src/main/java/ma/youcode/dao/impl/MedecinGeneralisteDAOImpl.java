@@ -66,18 +66,20 @@ public class MedecinGeneralisteDAOImpl implements MedecinGeneralisteDAO {
     }
 
     @Override
-    public void delete(MedecinGeneraliste medecin) {
+    public boolean delete(MedecinGeneraliste medecin) {
         EntityManager em = JPAUtil.getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
             em.remove(medecin);
             tx.commit();
+            return true;
         } catch (Exception e) {
             if (tx.isActive()) {
                 tx.rollback();
             }
             e.printStackTrace();
+            return false;
         } finally {
             em.close();
         }

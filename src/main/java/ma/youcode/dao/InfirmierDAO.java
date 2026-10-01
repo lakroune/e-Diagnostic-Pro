@@ -13,7 +13,7 @@ public interface InfirmierDAO {
 
     Infirmier update(Infirmier i);
 
-    void delete(Infirmier i);
+    boolean delete(Infirmier i);
 
     List<Infirmier> findAll();
 }

@@ -13,7 +13,7 @@ public interface DemandeTeleExpertiseDAO {
 
     DemandeTeleExpertise update(DemandeTeleExpertise demandeTeleExpertise);
 
-    void delete(DemandeTeleExpertise demandeTeleExpertise);
+    boolean delete(DemandeTeleExpertise demandeTeleExpertise);
 
     List<DemandeTeleExpertise> findAll();
 }

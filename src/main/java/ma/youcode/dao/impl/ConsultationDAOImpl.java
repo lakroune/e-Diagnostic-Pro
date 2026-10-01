@@ -74,7 +74,7 @@ public class ConsultationDAOImpl implements ConsultationDAO {
     }
 
     @Override
-    public void delete(Consultation consultation) {
+    public boolean delete(Consultation consultation) {
         EntityManager em = JPAUtil.getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
@@ -82,11 +82,13 @@ public class ConsultationDAOImpl implements ConsultationDAO {
             
             em.remove(consultation);
             tx.commit();
+            return true;
         } catch (Exception e) {
             if (tx.isActive()) {
                 tx.rollback();
             }
             e.printStackTrace();
+            return false;
         } finally {
             em.close();
         }
