@@ -6,20 +6,20 @@ import java.util.Optional;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import ma.youcode.config.JPAUtil;
-import ma.youcode.dao.CreneauDAO;
-import ma.youcode.model.Creneau;
+import ma.youcode.dao.MedecinSpecialisteDAO;
+import ma.youcode.model.MedecinSpecialiste;
 
-public class CreneauDAOImpl implements CreneauDAO {
+public class MedecinSpecialisteDAOImpl implements MedecinSpecialisteDAO {
 
     @Override
-    public Creneau save(Creneau creneau) {
+    public MedecinSpecialiste save(MedecinSpecialiste medecin) {
         EntityManager em = JPAUtil.getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
-            em.persist(creneau);
+            em.persist(medecin);
             tx.commit();
-            return creneau;
+            return medecin;
         } catch (Exception e) {
             if (tx.isActive()) {
                 tx.rollback();
@@ -32,34 +32,25 @@ public class CreneauDAOImpl implements CreneauDAO {
     }
 
     @Override
-    public Optional<Creneau> findById(Long id) {
+    public Optional<MedecinSpecialiste> findById(Long id) {
         EntityManager em = JPAUtil.getEntityManager();
         try {
-            Creneau creneau = em.createQuery(
-                    "SELECT c FROM Creneau c " +
-                            "LEFT JOIN FETCH c.medecinSpecialiste " +
-                            "WHERE c.id = :id",
-                    Creneau.class)
-                    .setParameter("id", id)
-                    .getSingleResult();
-
-            return Optional.ofNullable(creneau);
-        } catch (Exception e) {
-            return Optional.empty();
+            MedecinSpecialiste medecin = em.find(MedecinSpecialiste.class, id);
+            return Optional.ofNullable(medecin);
         } finally {
             em.close();
         }
     }
 
     @Override
-    public Creneau update(Creneau creneau) {
+    public MedecinSpecialiste update(MedecinSpecialiste medecin) {
         EntityManager em = JPAUtil.getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
-            Creneau updatedCreneau = em.merge(creneau);
+            MedecinSpecialiste updatedMedecin = em.merge(medecin);
             tx.commit();
-            return updatedCreneau;
+            return updatedMedecin;
         } catch (Exception e) {
             if (tx.isActive()) {
                 tx.rollback();
@@ -72,17 +63,17 @@ public class CreneauDAOImpl implements CreneauDAO {
     }
 
     @Override
-    public void delete(Creneau creneau) {
+    public void delete(MedecinSpecialiste medecin) {
         EntityManager em = JPAUtil.getEntityManager();
         EntityTransaction tx = em.getTransaction();
+
         try {
             tx.begin();
-            em.remove(creneau);
+            em.remove(medecin);
             tx.commit();
         } catch (Exception e) {
-            if (tx.isActive()) {
+            if (tx.isActive())
                 tx.rollback();
-            }
             e.printStackTrace();
         } finally {
             em.close();
@@ -90,17 +81,13 @@ public class CreneauDAOImpl implements CreneauDAO {
     }
 
     @Override
-    public List<Creneau> findAll() {
+    public List<MedecinSpecialiste> findAll() {
         EntityManager em = JPAUtil.getEntityManager();
         try {
-            return em.createQuery(
-                    "SELECT c FROM Creneau c " +
-                            "LEFT JOIN FETCH c.medecinSpecialiste",
-                    Creneau.class)
+            return em.createQuery("SELECT m FROM MedecinSpecialiste m", MedecinSpecialiste.class)
                     .getResultList();
         } finally {
             em.close();
         }
     }
-
 }

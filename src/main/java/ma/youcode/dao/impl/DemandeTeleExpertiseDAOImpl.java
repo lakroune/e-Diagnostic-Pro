@@ -79,8 +79,7 @@ public class DemandeTeleExpertiseDAOImpl implements DemandeTeleExpertiseDAO {
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
-            DemandeTeleExpertise managedDemande = em.contains(demande) ? demande : em.merge(demande);
-            em.remove(managedDemande);
+            em.remove(demande);
             tx.commit();
         } catch (Exception e) {
             if (tx.isActive()) {

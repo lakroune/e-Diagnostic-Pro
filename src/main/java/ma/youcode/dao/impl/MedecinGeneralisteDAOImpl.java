@@ -73,8 +73,7 @@ public class MedecinGeneralisteDAOImpl implements MedecinGeneralisteDAO {
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
-            MedecinGeneraliste managedMedecin = em.contains(medecin) ? medecin : em.merge(medecin);
-            em.remove(managedMedecin);
+            em.remove(medecin);
             tx.commit();
         } catch (Exception e) {
             if (tx.isActive()) {

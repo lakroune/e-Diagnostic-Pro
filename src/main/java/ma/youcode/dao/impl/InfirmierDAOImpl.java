@@ -70,8 +70,7 @@ public class InfirmierDAOImpl implements InfirmierDAO {
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
-            Infirmier managedInfirmier = em.contains(infirmier) ? infirmier : em.merge(infirmier);
-            em.remove(managedInfirmier);
+            em.remove(infirmier);
             tx.commit();
         } catch (Exception e) {
             if (tx.isActive()) {

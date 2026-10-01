@@ -79,10 +79,8 @@ public class ConsultationDAOImpl implements ConsultationDAO {
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
-            Consultation managedConsultation = em.contains(consultation)
-                    ? consultation
-                    : em.merge(consultation);
-            em.remove(managedConsultation);
+            
+            em.remove(consultation);
             tx.commit();
         } catch (Exception e) {
             if (tx.isActive()) {

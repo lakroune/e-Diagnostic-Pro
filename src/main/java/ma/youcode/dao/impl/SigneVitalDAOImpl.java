@@ -5,21 +5,22 @@ import java.util.Optional;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.NoResultException;
 import ma.youcode.config.JPAUtil;
-import ma.youcode.dao.CreneauDAO;
-import ma.youcode.model.Creneau;
+import ma.youcode.dao.SigneVitalDAO;
+import ma.youcode.model.SigneVital;
 
-public class CreneauDAOImpl implements CreneauDAO {
+public class SigneVitalDAOImpl implements SigneVitalDAO {
 
     @Override
-    public Creneau save(Creneau creneau) {
+    public SigneVital save(SigneVital signeVital) {
         EntityManager em = JPAUtil.getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
-            em.persist(creneau);
+            em.persist(signeVital);
             tx.commit();
-            return creneau;
+            return signeVital;
         } catch (Exception e) {
             if (tx.isActive()) {
                 tx.rollback();
@@ -32,19 +33,20 @@ public class CreneauDAOImpl implements CreneauDAO {
     }
 
     @Override
-    public Optional<Creneau> findById(Long id) {
+    public Optional<SigneVital> findById(Long id) {
         EntityManager em = JPAUtil.getEntityManager();
         try {
-            Creneau creneau = em.createQuery(
-                    "SELECT c FROM Creneau c " +
-                            "LEFT JOIN FETCH c.medecinSpecialiste " +
-                            "WHERE c.id = :id",
-                    Creneau.class)
+            SigneVital signeVital = em.createQuery(
+                    "SELECT s FROM SigneVital s " +
+                            "LEFT JOIN FETCH s.patient " +
+                            "LEFT JOIN FETCH s.infirmier " +
+                            "WHERE s.id = :id",
+                    SigneVital.class)
                     .setParameter("id", id)
                     .getSingleResult();
 
-            return Optional.ofNullable(creneau);
-        } catch (Exception e) {
+            return Optional.ofNullable(signeVital);
+        } catch (NoResultException e) {
             return Optional.empty();
         } finally {
             em.close();
@@ -52,14 +54,14 @@ public class CreneauDAOImpl implements CreneauDAO {
     }
 
     @Override
-    public Creneau update(Creneau creneau) {
+    public SigneVital update(SigneVital signeVital) {
         EntityManager em = JPAUtil.getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
-            Creneau updatedCreneau = em.merge(creneau);
+            SigneVital updatedSigne = em.merge(signeVital);
             tx.commit();
-            return updatedCreneau;
+            return updatedSigne;
         } catch (Exception e) {
             if (tx.isActive()) {
                 tx.rollback();
@@ -72,12 +74,12 @@ public class CreneauDAOImpl implements CreneauDAO {
     }
 
     @Override
-    public void delete(Creneau creneau) {
+    public void delete(SigneVital signeVital) {
         EntityManager em = JPAUtil.getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
-            em.remove(creneau);
+            em.remove(signeVital);
             tx.commit();
         } catch (Exception e) {
             if (tx.isActive()) {
@@ -90,13 +92,15 @@ public class CreneauDAOImpl implements CreneauDAO {
     }
 
     @Override
-    public List<Creneau> findAll() {
+    public List<SigneVital> findAll() {
         EntityManager em = JPAUtil.getEntityManager();
         try {
             return em.createQuery(
-                    "SELECT c FROM Creneau c " +
-                            "LEFT JOIN FETCH c.medecinSpecialiste",
-                    Creneau.class)
+                    "SELECT DISTINCT s FROM SigneVital s " +
+                            "LEFT JOIN FETCH s.patient " +
+                            "LEFT JOIN FETCH s.infirmier " +
+                            "ORDER BY s.datePrise DESC",
+                    SigneVital.class)
                     .getResultList();
         } finally {
             em.close();

@@ -69,8 +69,7 @@ public class ActeTechniqueDAOImpl implements ActeTechniqueDAO {
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
-            ActeTechnique managedActe = em.contains(acteTechnique) ? acteTechnique : em.merge(acteTechnique);
-            em.remove(managedActe);
+            em.remove(acteTechnique);
             tx.commit();
         } catch (Exception e) {
             if (tx.isActive()) {
