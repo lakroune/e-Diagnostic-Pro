@@ -6,20 +6,20 @@ import java.util.Optional;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import ma.youcode.config.JPAUtil;
-import ma.youcode.dao.ConsultationDAO;
-import ma.youcode.model.Consultation;
+import ma.youcode.dao.CreneauDAO;
+import ma.youcode.model.Creneau;
 
-public class ConsultationDAOImpl implements ConsultationDAO {
+public class CreneauDAOImpl implements CreneauDAO {
 
     @Override
-    public Consultation save(Consultation consultation) {
+    public Creneau save(Creneau creneau) {
         EntityManager em = JPAUtil.getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
-            em.persist(consultation);
+            em.persist(creneau);
             tx.commit();
-            return consultation;
+            return creneau;
         } catch (Exception e) {
             if (tx.isActive()) {
                 tx.rollback();
@@ -32,36 +32,34 @@ public class ConsultationDAOImpl implements ConsultationDAO {
     }
 
     @Override
-    public Optional<Consultation> findById(Long id) {
+    public Optional<Creneau> findById(Long id) {
         EntityManager em = JPAUtil.getEntityManager();
         try {
-            
-            Consultation consultation = em.createQuery(
-                    "SELECT c FROM Consultation c " +
-                            "LEFT JOIN FETCH c.patient " +
-                            "LEFT JOIN FETCH c.medecinGeneraliste " +
-                            "LEFT JOIN FETCH c.actesTechniques " +
+            Creneau creneau = em.createQuery(
+                    "SELECT c FROM Creneau c " +
+                            "LEFT JOIN FETCH c.medecinSpecialiste " +
                             "WHERE c.id = :id",
-                    Consultation.class)
+                    Creneau.class)
                     .setParameter("id", id)
                     .getSingleResult();
 
-            return Optional.ofNullable(consultation);
+            return Optional.ofNullable(creneau);
         } catch (Exception e) {
             return Optional.empty();
         } finally {
             em.close();
         }
     }
+
     @Override
-    public Consultation update(Consultation consultation) {
+    public Creneau update(Creneau creneau) {
         EntityManager em = JPAUtil.getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
-            Consultation updatedConsultation = em.merge(consultation);
+            Creneau updatedCreneau = em.merge(creneau);
             tx.commit();
-            return updatedConsultation;
+            return updatedCreneau;
         } catch (Exception e) {
             if (tx.isActive()) {
                 tx.rollback();
@@ -74,15 +72,13 @@ public class ConsultationDAOImpl implements ConsultationDAO {
     }
 
     @Override
-    public void delete(Consultation consultation) {
+    public void delete(Creneau creneau) {
         EntityManager em = JPAUtil.getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
-            Consultation managedConsultation = em.contains(consultation)
-                    ? consultation
-                    : em.merge(consultation);
-            em.remove(managedConsultation);
+            Creneau managedCreneau = em.contains(creneau) ? creneau : em.merge(creneau);
+            em.remove(managedCreneau);
             tx.commit();
         } catch (Exception e) {
             if (tx.isActive()) {
@@ -95,17 +91,17 @@ public class ConsultationDAOImpl implements ConsultationDAO {
     }
 
     @Override
-    public List<Consultation> findAll() {
+    public List<Creneau> findAll() {
         EntityManager em = JPAUtil.getEntityManager();
         try {
             return em.createQuery(
-                    "SELECT DISTINCT c FROM Consultation c " +
-                            "LEFT JOIN FETCH c.patient " +
-                            "LEFT JOIN FETCH c.medecinGeneraliste",
-                    Consultation.class)
+                    "SELECT c FROM Creneau c " +
+                            "LEFT JOIN FETCH c.medecinSpecialiste",
+                    Creneau.class)
                     .getResultList();
         } finally {
             em.close();
         }
     }
+
 }
