@@ -68,7 +68,7 @@ public class PatientDAOImpl implements PatientDAO {
     }
 
     @Override
-    public void delete(Patient patient) {
+    public boolean delete(Patient patient) {
         EntityManager em = JPAUtil.getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
@@ -76,11 +76,13 @@ public class PatientDAOImpl implements PatientDAO {
             Patient managedPatient = em.contains(patient) ? patient : em.merge(patient);
             em.remove(managedPatient);
             tx.commit();
+            return true;
         } catch (Exception e) {
             if (tx.isActive()) {
                 tx.rollback();
             }
             e.printStackTrace();
+            return false;
         } finally {
             em.close();
         }

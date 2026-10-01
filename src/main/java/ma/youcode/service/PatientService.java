@@ -49,9 +49,9 @@ public class PatientService {
 
     }
 
-    public void delete(Long id) {
+    public boolean delete(Long id) {
         Patient patient = patientDAO.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Patient non trouvé avec l'ID : " + id));
-        patientDAO.delete(patient);
+        return patientDAO.delete(patient);
     }
 }

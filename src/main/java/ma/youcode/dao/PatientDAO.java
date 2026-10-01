@@ -12,7 +12,7 @@ public interface PatientDAO {
 
     Patient update(Patient patient);
 
-    void delete(Patient patient);
+    boolean delete(Patient patient);
 
     List<Patient> findAll();
 }
