@@ -14,7 +14,6 @@ public class AuthService {
         }
 
         user.setActif(true);
-
         return authDAO.register(user).get();
     }
 
@@ -29,6 +28,7 @@ public class AuthService {
             return userOpt.get();
         } else {
             throw new Exception("Identifiants incorrects .");
+
         }
     }
 }

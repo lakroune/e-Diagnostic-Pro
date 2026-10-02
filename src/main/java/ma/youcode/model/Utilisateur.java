@@ -34,7 +34,8 @@ public class Utilisateur implements Serializable {
 
     @Column(nullable = false)
     private String motDePasse;
-
+    
+    @Column
     private String telephone;
 
     @Enumerated(EnumType.STRING)
