@@ -1,6 +1,5 @@
 package ma.youcode.model;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -18,8 +17,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "patients")
-public class Patient implements Serializable {
-
+public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -3,13 +3,28 @@
 <!DOCTYPE html>
 <html>
 <head>
+
     <meta charset="UTF-8">
-    <title>Dashboard Médecin</title>
+
+    <title>Dashboard Infirmier</title>
 
     <style>
+
         body {
             margin: 0;
             font-family: Arial, sans-serif;
+        }
+
+        .menu {
+            border-bottom: 1px solid black;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .menu a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: black;
         }
 
         .container {
@@ -18,29 +33,21 @@
             text-align: center;
         }
 
-        .logout {
-            display: inline-block;
-            padding: 10px 20px;
-            border: 1px solid black;
-            text-decoration: none;
-        }
     </style>
+
 </head>
 
 <body>
 
-<div class="container">
+    <jsp:include page="menu.jsp" />
 
-    <h1>Dashboard Médecin Généraliste</h1>
+    <div class="container">
 
-    <p>Bienvenue dans votre espace médecin généraliste.</p>
+        <h1>Dashboard Infirmier</h1>
 
-    <a class="logout"
-       href="${pageContext.request.contextPath}/logout">
-        Déconnexion
-    </a>
+        <p>Bienvenue dans votre espace infirmier.</p>
 
-</div>
+    </div>
 
 </body>
 </html>
