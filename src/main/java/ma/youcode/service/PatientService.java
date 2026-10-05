@@ -59,4 +59,9 @@ public class PatientService {
     public List<Patient> findAll() {
         return patientDAO.findAll();
     }
+
+    public List<Patient> getListAttente() {
+
+        return patientDAO.getListAttente();
+    }
 }

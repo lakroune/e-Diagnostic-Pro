@@ -15,4 +15,6 @@ public interface PatientDAO {
     boolean delete(Patient patient);
 
     List<Patient> findAll();
+
+    List<Patient> getListAttente();
 }

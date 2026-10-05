@@ -14,7 +14,7 @@
         Patients
     </a>
 
-    <a href="${pageContext.request.contextPath}/infirmier/attente">
+    <a href="${pageContext.request.contextPath}/infirmier/liste-attente">
         Liste d'attente
     </a>
 

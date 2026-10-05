@@ -98,4 +98,15 @@ public class PatientDAOImpl implements PatientDAO {
             em.close();
         }
     }
+
+    @Override
+    public List<Patient> getListAttente() {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            return em.createQuery("SELECT p FROM Patient p WHERE p.enAttente = true", Patient.class)
+                    .getResultList();
+        } finally {
+            em.close();
+        }
+    }
 }
