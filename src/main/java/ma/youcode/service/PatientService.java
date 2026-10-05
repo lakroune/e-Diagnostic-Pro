@@ -1,6 +1,7 @@
 package ma.youcode.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -53,5 +54,9 @@ public class PatientService {
         Patient patient = patientDAO.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Patient non trouvé avec l'ID : " + id));
         return patientDAO.delete(patient);
+    }
+
+    public List<Patient> findAll() {
+        return patientDAO.findAll();
     }
 }

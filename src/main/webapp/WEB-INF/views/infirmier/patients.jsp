@@ -1,94 +1,107 @@
-
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+    <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
-<!DOCTYPE html>
-<html>
-<head>
+        <!DOCTYPE html>
+        <html>
 
-    <meta charset="UTF-8">
+        <head>
+            <meta charset="UTF-8">
+            <title>Liste des patients</title>
 
-    <title>Liste des patients</title>
+            <style>
+                body {
+                    margin: 0;
+                    font-family: Arial, sans-serif;
+                }
 
-    <style>
+                .menu {
+                    border-bottom: 1px solid black;
+                    padding: 20px;
+                    text-align: center;
+                }
 
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-        }
+                .menu a {
+                    margin: 0 15px;
+                    text-decoration: none;
+                    color: black;
+                }
 
-        .menu {
-            border-bottom: 1px solid black;
-            padding: 20px;
-            text-align: center;
-        }
+                .container {
+                    width: 80%;
+                    margin: 70px auto;
+                }
 
-        .menu a {
-            margin: 0 15px;
-            text-decoration: none;
-            color: black;
-        }
+                h1 {
+                    text-align: center;
+                }
 
-        .container {
-            width: 80%;
-            margin: 70px auto;
-        }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-top: 30px;
+                }
 
-        h1 {
-            text-align: center;
-        }
+                th,
+                td {
+                    border: 1px solid black;
+                    padding: 10px;
+                    text-align: center;
+                }
+            </style>
+        </head>
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 30px;
-        }
+        <body>
 
-        th,
-        td {
-            border: 1px solid black;
-            padding: 10px;
-            text-align: center;
-        }
+            <jsp:include page="menu.jsp" />
 
-    </style>
+            <div class="container">
 
-</head>
+                <h1>Liste des patients</h1>
 
-<body>
+                <table>
 
-    <jsp:include page="menu.jsp" />
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nom</th>
+                            <th>Prénom</th>
+                            <th>Date naissance</th>
+                            <th>N° sécurité sociale</th>
+                            <th>Téléphone</th>
+                            <th>Adresse</th>
+                        </tr>
+                    </thead>
 
-    <div class="container">
+                    <tbody>
 
-        <h1>Liste des patients</h1>
+                        <c:forEach var="patient" items="${patients}">
 
-        <table>
+                            <tr>
 
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nom</th>
-                    <th>Prénom</th>
-                    <th>CIN</th>
-                    <th>Téléphone</th>
-                </tr>
-            </thead>
+                                <td>${patient.id}</td>
 
-            <tbody>
+                                <td>${patient.nom}</td>
 
-                <tr>
-                    <td>1</td>
-                    <td>Patient</td>
-                    <td>Test</td>
-                    <td>AB123456</td>
-                    <td>0612345678</td>
-                </tr>
+                                <td>${patient.prenom}</td>
 
-            </tbody>
+                                <td>${patient.dateNaissance}</td>
 
-        </table>
+                                <td>${patient.numSecuriteSociale}</td>
 
-    </div>
+                                <td>${patient.telephone}</td>
 
-</body>
-</html>
+                                <td>${patient.adresse}</td>
+
+                            </tr>
+
+                        </c:forEach>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </body>
+
+        </html>
