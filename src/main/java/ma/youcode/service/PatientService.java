@@ -1,6 +1,8 @@
 package ma.youcode.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -83,5 +85,16 @@ public class PatientService {
     public List<Patient> getListAttente() {
 
         return patientDAO.getListAttente();
+    }
+
+    public List<Patient> getPatientsDuJour() {
+        LocalDate today = LocalDate.now();
+
+        return patientDAO.findAll().stream()
+                // .filter(Objects::nonNull)
+                .filter(patient -> patient.getDateEnregistrement() != null
+                        && patient.getDateEnregistrement().toLocalDate().equals(today))
+                .sorted(Comparator.comparing(Patient::getDateEnregistrement))
+                .toList();
     }
 }
