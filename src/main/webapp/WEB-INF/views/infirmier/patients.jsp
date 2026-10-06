@@ -14,18 +14,6 @@
                     font-family: Arial, sans-serif;
                 }
 
-                .menu {
-                    border-bottom: 1px solid black;
-                    padding: 20px;
-                    text-align: center;
-                }
-
-                .menu a {
-                    margin: 0 15px;
-                    text-decoration: none;
-                    color: black;
-                }
-
                 .container {
                     width: 80%;
                     margin: 70px auto;
@@ -48,10 +36,12 @@
                     text-align: center;
                 }
 
-                button,
                 .action-link {
+                    color: black;
+                    text-decoration: none;
+                    border: 1px solid black;
                     padding: 8px 12px;
-                    cursor: pointer;
+                    display: inline-block;
                 }
             </style>
         </head>

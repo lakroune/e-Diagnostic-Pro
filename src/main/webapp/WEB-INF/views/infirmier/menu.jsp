@@ -2,14 +2,10 @@
 
 <style>
     .menu {
-        position: sticky;
-        top: 0;
-        z-index: 1000;
-        background: white;
         border-bottom: 1px solid black;
         padding: 20px;
         text-align: center;
-        box-sizing: border-box;
+        background: white;
     }
 
     .menu a {

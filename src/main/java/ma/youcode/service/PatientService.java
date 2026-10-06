@@ -22,8 +22,28 @@ public class PatientService {
     }
 
     public Patient create(Patient patient) {
-        patient.setDateEnregistrement(LocalDateTime.now());
-        return patientDAO.save(patient);
+        return addToWaitingList(patient);
+    }
+
+    public Patient addToWaitingList(Patient patient) {
+        if (patient == null) {
+            throw new IllegalArgumentException("Patient ne peut pas être null");
+        }
+        if (patient.getDateEnregistrement() == null) {
+            patient.setDateEnregistrement(LocalDateTime.now());
+        }
+        patient.setEnAttente(true);
+        if (patient.getId() == null) {
+            return patientDAO.save(patient);
+        }
+        return patientDAO.update(patient);
+    }
+
+    public Optional<Patient> findByNumSecuriteSociale(String numSecuriteSociale) {
+        if (numSecuriteSociale == null || numSecuriteSociale.isBlank()) {
+            return Optional.empty();
+        }
+        return patientDAO.findByNumSecuriteSociale(numSecuriteSociale.trim());
     }
 
     public Patient update(Long id, Patient patientDetails) {

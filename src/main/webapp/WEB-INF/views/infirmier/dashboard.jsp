@@ -30,14 +30,6 @@
                 margin: 100px auto;
                 text-align: center;
             }
-
-            .logout {
-                display: inline-block;
-                padding: 10px 20px;
-                border: 1px solid black;
-                text-decoration: none;
-                color: black;
-            }
         </style>
     </head>
 

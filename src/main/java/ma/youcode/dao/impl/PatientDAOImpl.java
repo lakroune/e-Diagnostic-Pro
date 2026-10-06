@@ -57,6 +57,23 @@ public class PatientDAOImpl implements PatientDAO {
     }
 
     @Override
+    public Optional<Patient> findByNumSecuriteSociale(String numSecuriteSociale) {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            return em.createQuery(
+                    "SELECT p FROM Patient p WHERE p.numSecuriteSociale = :numero",
+                    Patient.class)
+                    .setParameter("numero", numSecuriteSociale)
+                    .getResultStream()
+                    .findFirst();
+        } catch (Exception e) {
+            return Optional.empty();
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
     public Patient update(Patient patient) {
         EntityManager em = JPAUtil.getEntityManager();
         EntityTransaction tx = em.getTransaction();

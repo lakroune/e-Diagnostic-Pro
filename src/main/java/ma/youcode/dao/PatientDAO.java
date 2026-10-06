@@ -10,6 +10,8 @@ public interface PatientDAO {
 
     Optional<Patient> findById(Long id);
 
+    Optional<Patient> findByNumSecuriteSociale(String numSecuriteSociale);
+
     Patient update(Patient patient);
 
     boolean delete(Patient patient);
