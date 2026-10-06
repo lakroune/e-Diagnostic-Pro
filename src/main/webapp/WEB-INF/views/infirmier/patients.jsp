@@ -47,6 +47,12 @@
                     padding: 10px;
                     text-align: center;
                 }
+
+                button,
+                .action-link {
+                    padding: 8px 12px;
+                    cursor: pointer;
+                }
             </style>
         </head>
 
@@ -69,6 +75,7 @@
                             <th>N° sécurité sociale</th>
                             <th>Téléphone</th>
                             <th>Adresse</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
 
@@ -91,6 +98,10 @@
                                 <td>${patient.telephone}</td>
 
                                 <td>${patient.adresse}</td>
+
+                                <td>
+                                    <a class="action-link" href="${pageContext.request.contextPath}/infirmier/patients/${patient.id}">Détails</a>
+                                </td>
 
                             </tr>
 

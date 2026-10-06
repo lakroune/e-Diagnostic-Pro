@@ -49,21 +49,26 @@
                         <tr>
                             <th>Position</th>
                             <th>Patient</th>
-                            <th>CIN</th>
-                            <th>Date</th>
+                            <th>N° sécurité sociale</th>
+                            <th>Date d'enregistrement</th>
                             <th>Statut</th>
                         </tr>
                     </thead>
                     <tbody>
                         <c:choose>
                             <c:when test="${not empty listeAttente}">
-                                <c:forEach var="item" items="${listeAttente}" varStatus="loop">
+                                <c:forEach var="patient" items="${listeAttente}" varStatus="loop">
                                     <tr>
                                         <td>${loop.count}</td>
-                                        <td>${item.patient.nom} ${item.patient.prenom}</td>
-                                        <td>${item.patient.cin}</td>
-                                        <td>${item.dateCreation}</td>
-                                        <td>${item.statut}</td>
+                                        <td>${patient.nom} ${patient.prenom}</td>
+                                        <td>${not empty patient.numSecuriteSociale ? patient.numSecuriteSociale : 'Non renseigné'}</td>
+                                        <td>${not empty patient.dateEnregistrement ? patient.dateEnregistrement : 'Non renseignée'}</td>
+                                        <td>
+                                            <c:choose>
+                                                <c:when test="${patient.enAttente}">En attente</c:when>
+                                                <c:otherwise>Pris en charge</c:otherwise>
+                                            </c:choose>
+                                        </td>
                                     </tr>
                                 </c:forEach>
                             </c:when>

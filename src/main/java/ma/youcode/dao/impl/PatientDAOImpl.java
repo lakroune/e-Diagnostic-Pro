@@ -38,7 +38,16 @@ public class PatientDAOImpl implements PatientDAO {
     public Optional<Patient> findById(Long id) {
         EntityManager em = JPAUtil.getEntityManager();
         try {
-            Patient p = em.find(Patient.class, id);
+            Patient p = em.createQuery(
+                    "SELECT DISTINCT p FROM Patient p " +
+                            "LEFT JOIN FETCH p.signesVitaux s " +
+                            "LEFT JOIN FETCH s.infirmier " +
+                            "WHERE p.id = :id",
+                    Patient.class)
+                    .setParameter("id", id)
+                    .getResultStream()
+                    .findFirst()
+                    .orElse(null);
             return Optional.ofNullable(p);
         } catch (Exception e) {
             return Optional.empty();

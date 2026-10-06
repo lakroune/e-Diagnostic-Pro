@@ -36,7 +36,7 @@ public class SigneVitalServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        request.setCharacterEncoding("UTF-8");//pour eviter le problem de"' é à"
+        request.setCharacterEncoding("UTF-8");
         String servletPath = request.getServletPath();
 
         if ("/patients/signeVitaux/delete".equals(servletPath)) {
@@ -50,6 +50,14 @@ public class SigneVitalServlet extends HttpServlet {
         }
 
         doCreateSigneVital(request, response);
+    }
+
+    public String resolvePatientRedirectUrl(HttpServletRequest request, Long patientId) {
+        String contextPath = request.getContextPath();
+        if (patientId == null) {
+            return contextPath + "/infirmier/patients";
+        }
+        return contextPath + "/infirmier/patients/" + patientId;
     }
 
     private void doCreateSigneVital(HttpServletRequest request, HttpServletResponse response)
@@ -70,8 +78,7 @@ public class SigneVitalServlet extends HttpServlet {
                     signeVital.setInfirmier(infirmierConnecte);
 
                     signeVitalService.create(signeVital);
-
-                    response.sendRedirect(request.getContextPath() + "/infirmier/patients/" + patientId);
+                    response.sendRedirect(resolvePatientRedirectUrl(request, patientId));
                     return;
                 }
             } catch (Exception e) {
@@ -94,7 +101,6 @@ public class SigneVitalServlet extends HttpServlet {
 
                 if (existingOpt.isPresent()) {
                     SigneVital signeVital = existingOpt.get();
-
                     signeVital.setTensionArterielle(request.getParameter("tensionArterielle"));
                     signeVital.setFrequenceCardiaque(parseInteger(request.getParameter("frequenceCardiaque")));
                     signeVital.setTemperatureCorporelle(parseDouble(request.getParameter("temperatureCorporelle")));
@@ -103,8 +109,7 @@ public class SigneVitalServlet extends HttpServlet {
                     signeVital.setTailleCm(parseDouble(request.getParameter("tailleCm")));
 
                     signeVitalService.update(id, signeVital);
-
-                    response.sendRedirect(request.getContextPath() + "/infirmier/patients/" + patientIdStr);
+                    response.sendRedirect(resolvePatientRedirectUrl(request, parseLongOrNull(patientIdStr)));
                     return;
                 }
             } catch (Exception e) {
@@ -124,11 +129,8 @@ public class SigneVitalServlet extends HttpServlet {
             try {
                 Long id = Long.parseLong(idStr);
                 signeVitalService.delete(id);
-
-                if (patientIdStr != null && !patientIdStr.trim().isEmpty()) {
-                    response.sendRedirect(request.getContextPath() + "/infirmier/patients/" + patientIdStr);
-                    return;
-                }
+                response.sendRedirect(resolvePatientRedirectUrl(request, parseLongOrNull(patientIdStr)));
+                return;
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -148,11 +150,22 @@ public class SigneVitalServlet extends HttpServlet {
         return sv;
     }
 
-    private Integer parseInteger(String val) {
-        return (val != null && !val.trim().isEmpty()) ? Integer.parseInt(val) : null;
+    private Integer parseInteger(String value) {
+        return (value != null && !value.trim().isEmpty()) ? Integer.parseInt(value) : null;
     }
 
-    private Double parseDouble(String val) {
-        return (val != null && !val.trim().isEmpty()) ? Double.parseDouble(val) : null;
+    private Double parseDouble(String value) {
+        return (value != null && !value.trim().isEmpty()) ? Double.parseDouble(value) : null;
+    }
+
+    private Long parseLongOrNull(String value) {
+        if (value == null || value.trim().isEmpty()) {
+            return null;
+        }
+        try {
+            return Long.parseLong(value);
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 }

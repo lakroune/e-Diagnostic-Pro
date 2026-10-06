@@ -10,6 +10,8 @@
 
         <body>
 
+            <jsp:include page="menu.jsp" />
+
             <c:choose>
                 <c:when test="${not empty patient}">
                     <h1>Détails du Patient</h1>
@@ -19,6 +21,20 @@
                         <li><strong>Nom :</strong> ${patient.nom}</li>
                         <li><strong>Prénom :</strong> ${patient.prenom}</li>
                         <li><strong>Date de naissance :</strong> ${patient.dateNaissance}</li>
+                        <li><strong>N° sécurité sociale :</strong> ${not empty patient.numSecuriteSociale ? patient.numSecuriteSociale : 'Non renseigné'}</li>
+                        <li><strong>Téléphone :</strong> ${not empty patient.telephone ? patient.telephone : 'Non renseigné'}</li>
+                        <li><strong>Adresse :</strong> ${not empty patient.adresse ? patient.adresse : 'Non renseignée'}</li>
+                        <li><strong>Mutuelle :</strong> ${not empty patient.mutuelle ? patient.mutuelle : 'Non renseignée'}</li>
+                        <li><strong>Antécédents :</strong> ${not empty patient.antecedents ? patient.antecedents : 'Aucun'}</li>
+                        <li><strong>Allergies :</strong> ${not empty patient.allergies ? patient.allergies : 'Aucune'}</li>
+                        <li><strong>Traitements en cours :</strong> ${not empty patient.traitementsEnCours ? patient.traitementsEnCours : 'Aucun'}</li>
+                        <li><strong>Statut :</strong>
+                            <c:choose>
+                                <c:when test="${patient.enAttente}">En attente</c:when>
+                                <c:otherwise>Pris en charge</c:otherwise>
+                            </c:choose>
+                        </li>
+                        <li><strong>Date d'enregistrement :</strong> ${not empty patient.dateEnregistrement ? patient.dateEnregistrement : 'Non renseignée'}</li>
                     </ul>
 
                     <hr>
@@ -128,6 +144,64 @@
                                 modification</button>
                         </p>
 
+                    </form>
+
+                    <hr>
+
+                    <h2>Modifier les informations du patient</h2>
+                    <form action="${pageContext.request.contextPath}/infirmier/patients" method="POST">
+                        <input type="hidden" name="action" value="update">
+                        <input type="hidden" name="id" value="${patient.id}">
+
+                        <p>
+                            <label>Nom :</label><br>
+                            <input type="text" name="nom" value="${patient.nom}" required>
+                        </p>
+                        <p>
+                            <label>Prénom :</label><br>
+                            <input type="text" name="prenom" value="${patient.prenom}" required>
+                        </p>
+                        <p>
+                            <label>Date de naissance :</label><br>
+                            <input type="date" name="dateNaissance" value="${patient.dateNaissance}">
+                        </p>
+                        <p>
+                            <label>Numéro de sécurité sociale :</label><br>
+                            <input type="text" name="numSecuriteSociale" value="${patient.numSecuriteSociale}">
+                        </p>
+                        <p>
+                            <label>Téléphone :</label><br>
+                            <input type="text" name="telephone" value="${patient.telephone}">
+                        </p>
+                        <p>
+                            <label>Adresse :</label><br>
+                            <input type="text" name="adresse" value="${patient.adresse}">
+                        </p>
+                        <p>
+                            <label>Mutuelle :</label><br>
+                            <input type="text" name="mutuelle" value="${patient.mutuelle}">
+                        </p>
+                        <p>
+                            <label>Antécédents :</label><br>
+                            <textarea name="antecedents">${patient.antecedents}</textarea>
+                        </p>
+                        <p>
+                            <label>Allergies :</label><br>
+                            <textarea name="allergies">${patient.allergies}</textarea>
+                        </p>
+                        <p>
+                            <label>Traitements en cours :</label><br>
+                            <textarea name="traitementsEnCours">${patient.traitementsEnCours}</textarea>
+                        </p>
+
+                        <button type="submit">Enregistrer les modifications</button>
+                    </form>
+
+                    <form action="${pageContext.request.contextPath}/infirmier/patients" method="POST"
+                        onsubmit="return confirm('Voulez-vous vraiment supprimer ce patient ?');">
+                        <input type="hidden" name="action" value="delete">
+                        <input type="hidden" name="id" value="${patient.id}">
+                        <button type="submit">Supprimer ce patient</button>
                     </form>
 
                 </c:when>
