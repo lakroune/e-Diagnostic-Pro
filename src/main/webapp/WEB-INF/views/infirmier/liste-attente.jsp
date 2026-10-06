@@ -61,8 +61,10 @@
                                     <tr>
                                         <td>${loop.count}</td>
                                         <td>${patient.nom} ${patient.prenom}</td>
-                                        <td>${not empty patient.numSecuriteSociale ? patient.numSecuriteSociale : 'Non renseigné'}</td>
-                                        <td>${not empty patient.dateEnregistrement ? patient.dateEnregistrement : 'Non renseignée'}</td>
+                                        <td>${not empty patient.numSecuriteSociale ? patient.numSecuriteSociale : 'Non
+                                            renseigné'}</td>
+                                        <td>${not empty patient.dateEnregistrement ? patient.dateEnregistrement : 'Non
+                                            renseignée'}</td>
                                         <td>
                                             <c:choose>
                                                 <c:when test="${patient.enAttente}">En attente</c:when>

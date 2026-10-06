@@ -6,30 +6,6 @@
     <head>
         <meta charset="UTF-8">
         <title>Dashboard Admin</title>
-
-        <style>
-            body {
-                margin: 0;
-                font-family: Arial, sans-serif;
-            }
-
-            .container {
-                width: 80%;
-                margin: 100px auto;
-                text-align: center;
-            }
-
-            h1 {
-                margin-bottom: 10px;
-            }
-
-            .logout {
-                display: inline-block;
-                padding: 10px 20px;
-                border: 1px solid black;
-                text-decoration: none;
-            }
-        </style>
     </head>
 
     <body>
@@ -40,9 +16,14 @@
 
             <p>Bienvenue dans votre espace administrateur.</p>
 
-            <a class="logout" href="${pageContext.request.contextPath}/logout">
-                Déconnexion
-            </a>
+            <div class="actions">
+                <a class="btn" href="${pageContext.request.contextPath}/admin/utilisateurs/ajouter">
+                    Ajouter un utilisateur
+                </a>
+                <a class="btn" href="${pageContext.request.contextPath}/logout">
+                    Déconnexion
+                </a>
+            </div>
 
         </div>
 
