@@ -26,8 +26,7 @@ public class CreneauService {
     public Creneau update(Long id, Creneau c) {
         Creneau existingCreneau = creneauDAO.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Creneau non trouvé avec l'ID : " + id));
-        // Long id, LocalDateTime dateHeureDebut, LocalDateTime dateHeureFin,
-        // StatutCreneau statut)
+
         existingCreneau.setDateHeureDebut(c.getDateHeureDebut());
         existingCreneau.setDateHeureFin(c.getDateHeureFin());
         existingCreneau.setStatut(c.getStatut());

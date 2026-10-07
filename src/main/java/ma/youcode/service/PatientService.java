@@ -35,7 +35,7 @@ public class PatientService {
         if (patient.getDateEnregistrement() == null) {
             patient.setDateEnregistrement(LocalDateTime.now());
         }
-        patient.setEnAttente(true);
+
         if (patient.getId() == null) {
             return patientDAO.save(patient);
         }
@@ -63,7 +63,6 @@ public class PatientService {
         exist.setAntecedents(patientDetails.getAntecedents());
         exist.setAllergies(patientDetails.getAllergies());
         exist.setTraitementsEnCours(patientDetails.getTraitementsEnCours());
-        exist.setEnAttente(patientDetails.isEnAttente());
 
         return patientDAO.update(exist);
     }

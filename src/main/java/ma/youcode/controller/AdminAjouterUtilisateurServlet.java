@@ -69,7 +69,8 @@ public class AdminAjouterUtilisateurServlet extends HttpServlet {
                 String matriculePro = request.getParameter("matriculePro");
                 if (matriculePro == null || matriculePro.isBlank()) {
                     request.setAttribute("error", "Le matricule professionnel est obligatoire pour un infirmier.");
-                    request.getRequestDispatcher("/WEB-INF/views/admin/ajouter-utilisateur.jsp").forward(request, response);
+                    request.getRequestDispatcher("/WEB-INF/views/admin/ajouter-utilisateur.jsp").forward(request,
+                            response);
                     return;
                 }
 
@@ -78,7 +79,6 @@ public class AdminAjouterUtilisateurServlet extends HttpServlet {
                 infirmier.setPrenom(prenom);
                 infirmier.setEmail(email);
                 infirmier.setMotDePasse(motDePasse);
-                infirmier.setTelephone(telephone);
                 infirmier.setActif(true);
                 infirmier.setMatriculePro(matriculePro);
 
@@ -89,7 +89,8 @@ public class AdminAjouterUtilisateurServlet extends HttpServlet {
                 String matriculeOrdre = request.getParameter("matriculeOrdre");
                 if (matriculeOrdre == null || matriculeOrdre.isBlank()) {
                     request.setAttribute("error", "Le matricule d'ordre est obligatoire pour un médecin généraliste.");
-                    request.getRequestDispatcher("/WEB-INF/views/admin/ajouter-utilisateur.jsp").forward(request, response);
+                    request.getRequestDispatcher("/WEB-INF/views/admin/ajouter-utilisateur.jsp").forward(request,
+                            response);
                     return;
                 }
 
@@ -98,7 +99,6 @@ public class AdminAjouterUtilisateurServlet extends HttpServlet {
                 medecinGeneraliste.setPrenom(prenom);
                 medecinGeneraliste.setEmail(email);
                 medecinGeneraliste.setMotDePasse(motDePasse);
-                medecinGeneraliste.setTelephone(telephone);
                 medecinGeneraliste.setActif(true);
                 medecinGeneraliste.setMatriculeOrdre(matriculeOrdre);
 
@@ -109,7 +109,8 @@ public class AdminAjouterUtilisateurServlet extends HttpServlet {
                 String specialiteParam = request.getParameter("specialite");
                 if (specialiteParam == null || specialiteParam.isBlank()) {
                     request.setAttribute("error", "La spécialité est obligatoire pour un médecin spécialiste.");
-                    request.getRequestDispatcher("/WEB-INF/views/admin/ajouter-utilisateur.jsp").forward(request, response);
+                    request.getRequestDispatcher("/WEB-INF/views/admin/ajouter-utilisateur.jsp").forward(request,
+                            response);
                     return;
                 }
 
@@ -121,7 +122,6 @@ public class AdminAjouterUtilisateurServlet extends HttpServlet {
                 medecinSpecialiste.setPrenom(prenom);
                 medecinSpecialiste.setEmail(email);
                 medecinSpecialiste.setMotDePasse(motDePasse);
-                medecinSpecialiste.setTelephone(telephone);
                 medecinSpecialiste.setActif(true);
                 medecinSpecialiste.setSpecialite(SpecialiteMedicale.valueOf(specialiteParam));
                 if (tarifParam != null && !tarifParam.isBlank()) {

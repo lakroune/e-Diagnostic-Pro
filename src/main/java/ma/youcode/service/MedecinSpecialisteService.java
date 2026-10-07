@@ -34,7 +34,6 @@ public class MedecinSpecialisteService {
         existingMedecin.setPrenom(m.getPrenom());
         existingMedecin.setEmail(m.getEmail());
         existingMedecin.setMotDePasse(m.getMotDePasse());
-        existingMedecin.setTelephone(m.getTelephone());
         existingMedecin.setActif(m.isActif());
         existingMedecin.setSpecialite(m.getSpecialite());
         existingMedecin.setTarifExpertise(m.getTarifExpertise());

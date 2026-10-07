@@ -31,7 +31,6 @@ public class InfirmierService {
         existingInfirmier.setPrenom(i.getPrenom());
         existingInfirmier.setEmail(i.getEmail());
         existingInfirmier.setMotDePasse(i.getMotDePasse());
-        existingInfirmier.setTelephone(i.getTelephone());
         existingInfirmier.setActif(i.isActif());
         existingInfirmier.setMatriculePro(i.getMatriculePro());
         return infirmierDAO.update(existingInfirmier);
