@@ -48,15 +48,16 @@ public class Patient {
     @Column(columnDefinition = "TEXT")
     private String traitementsEnCours;
 
-    private boolean enAttente;
-
     private LocalDateTime dateEnregistrement;
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Consultation> consultations = new ArrayList<>();
 
-    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<SigneVital> signesVitaux = new ArrayList<>();
+
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<FileAttente> fileAttentes = new ArrayList<>();
 
     public Patient() {
     }
@@ -76,7 +77,6 @@ public class Patient {
         this.antecedents = antecedents;
         this.allergies = allergies;
         this.traitementsEnCours = traitementsEnCours;
-        this.enAttente = enAttente;
         this.dateEnregistrement = dateEnregistrement;
     }
 
@@ -168,14 +168,6 @@ public class Patient {
         this.traitementsEnCours = traitementsEnCours;
     }
 
-    public boolean isEnAttente() {
-        return enAttente;
-    }
-
-    public void setEnAttente(boolean enAttente) {
-        this.enAttente = enAttente;
-    }
-
     public LocalDateTime getDateEnregistrement() {
         return dateEnregistrement;
     }
@@ -208,5 +200,23 @@ public class Patient {
     public void removeSigneVital(SigneVital signeVital) {
         signesVitaux.remove(signeVital);
         signeVital.setPatient(null);
+    }
+
+    public List<FileAttente> getFileAttentes() {
+        return fileAttentes;
+    }
+
+    public void setFileAttentes(List<FileAttente> fileAttentes) {
+        this.fileAttentes = fileAttentes;
+    }
+
+    public void addFileAttente(FileAttente fileAttente) {
+        fileAttentes.add(fileAttente);
+        fileAttente.setPatient(this);
+    }
+
+    public void removeFileAttente(FileAttente fileAttente) {
+        fileAttentes.remove(fileAttente);
+        fileAttente.setPatient(null);
     }
 }

@@ -34,9 +34,6 @@ public class Utilisateur implements Serializable {
 
     @Column(nullable = false)
     private String motDePasse;
-    
-    @Column
-    private String telephone;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -54,7 +51,6 @@ public class Utilisateur implements Serializable {
         this.prenom = prenom;
         this.email = email;
         this.motDePasse = motDePasse;
-        this.telephone = telephone;
         this.role = role;
         this.actif = actif;
     }
@@ -101,14 +97,6 @@ public class Utilisateur implements Serializable {
 
     public void setMotDePasse(String motDePasse) {
         this.motDePasse = motDePasse;
-    }
-
-    public String getTelephone() {
-        return telephone;
-    }
-
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
     }
 
     public Role getRole() {

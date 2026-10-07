@@ -13,7 +13,7 @@ import jakarta.persistence.Table;
 import ma.youcode.model.enums.Role;
 
 @Entity
-@Table(name = "medecins_generalistes") 
+@Table(name = "medecins_generalistes")
 @PrimaryKeyJoinColumn(name = "id")
 public class MedecinGeneraliste extends Utilisateur {
 
@@ -22,9 +22,6 @@ public class MedecinGeneraliste extends Utilisateur {
 
     @OneToMany(mappedBy = "medecinGeneraliste", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Consultation> consultations = new ArrayList<>();
-
-    @OneToMany(mappedBy = "medecinGeneraliste", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<DemandeTeleExpertise> demandesTeleExpertise = new ArrayList<>();
 
     public MedecinGeneraliste() {
         super();
@@ -53,14 +50,6 @@ public class MedecinGeneraliste extends Utilisateur {
         this.consultations = consultations;
     }
 
-    public List<DemandeTeleExpertise> getDemandesTeleExpertise() {
-        return demandesTeleExpertise;
-    }
-
-    public void setDemandesTeleExpertise(List<DemandeTeleExpertise> demandesTeleExpertise) {
-        this.demandesTeleExpertise = demandesTeleExpertise;
-    }
-
     public void addConsultation(Consultation consultation) {
         consultations.add(consultation);
         consultation.setMedecinGeneraliste(this);
@@ -71,13 +60,4 @@ public class MedecinGeneraliste extends Utilisateur {
         consultation.setMedecinGeneraliste(null);
     }
 
-    public void addDemandeTeleExpertise(DemandeTeleExpertise demande) {
-        demandesTeleExpertise.add(demande);
-        demande.setMedecinGeneraliste(this);
-    }
-
-    public void removeDemandeTeleExpertise(DemandeTeleExpertise demande) {
-        demandesTeleExpertise.remove(demande);
-        demande.setMedecinGeneraliste(null);
-    }
 }

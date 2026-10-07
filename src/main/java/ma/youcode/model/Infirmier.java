@@ -23,6 +23,9 @@ public class Infirmier extends Utilisateur {
     @OneToMany(mappedBy = "infirmier", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<SigneVital> signesVitaux = new ArrayList<>();
 
+    @OneToMany(mappedBy = "infirmier", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<FileAttente> fileAttentes = new ArrayList<>();
+
     public Infirmier() {
         super();
         this.setRole(Role.INFIRMIER);
@@ -58,5 +61,23 @@ public class Infirmier extends Utilisateur {
     public void removeSigneVital(SigneVital signeVital) {
         signesVitaux.remove(signeVital);
         signeVital.setInfirmier(null);
+    }
+
+    public List<FileAttente> getFileAttentes() {
+        return fileAttentes;
+    }
+
+    public void setFileAttentes(List<FileAttente> fileAttentes) {
+        this.fileAttentes = fileAttentes;
+    }
+
+    public void addFileAttente(FileAttente fileAttente) {
+        fileAttentes.add(fileAttente);
+        fileAttente.setInfirmier(this);
+    }
+
+    public void removeFileAttente(FileAttente fileAttente) {
+        fileAttentes.remove(fileAttente);
+        fileAttente.setInfirmier(null);
     }
 }

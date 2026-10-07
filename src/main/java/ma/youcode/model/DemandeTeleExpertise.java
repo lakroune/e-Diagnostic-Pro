@@ -46,10 +46,9 @@ public class DemandeTeleExpertise implements Serializable {
     @Column(columnDefinition = "TEXT")
     private String recommandations;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "medecin_generaliste_id")
-    private MedecinGeneraliste medecinGeneraliste;
+    private LocalDateTime dateRepons;
 
+   
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "consultation_id")
     private Consultation consultation;
@@ -142,13 +141,7 @@ public class DemandeTeleExpertise implements Serializable {
         this.recommandations = recommandations;
     }
 
-    public MedecinGeneraliste getMedecinGeneraliste() {
-        return medecinGeneraliste;
-    }
-
-    public void setMedecinGeneraliste(MedecinGeneraliste medecinGeneraliste) {
-        this.medecinGeneraliste = medecinGeneraliste;
-    }
+    
 
     public Consultation getConsultation() {
         return consultation;

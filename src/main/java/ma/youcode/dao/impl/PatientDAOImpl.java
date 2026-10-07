@@ -50,7 +50,7 @@ public class PatientDAOImpl implements PatientDAO {
                     .orElse(null);
             return Optional.ofNullable(p);
         } catch (Exception e) {
-            return Optional.empty();
+            return Optional.empty();    
         } finally {
             em.close();
         }

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -91,7 +92,7 @@ public class PatientService {
         LocalDate today = LocalDate.now();
 
         return patientDAO.findAll().stream()
-                // .filter(Objects::nonNull)
+                .filter(Objects::nonNull)
                 .filter(patient -> patient.getDateEnregistrement() != null
                         && patient.getDateEnregistrement().toLocalDate().equals(today))
                 .sorted(Comparator.comparing(Patient::getDateEnregistrement))
