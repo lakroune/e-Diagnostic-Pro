@@ -57,38 +57,49 @@ public class AjouterPatientServlet extends HttpServlet {
         if ("add-to-waiting".equals(action) && existingPatient.isPresent()) {
             Patient patient = existingPatient.get();
             patientService.addToWaitingList(patient);
-            response.sendRedirect(request.getContextPath() + "/infirmier/patients/" + patient.getId());
+            redirectToPatientDetails(request, response, patient);
             return;
         }
 
-        Patient patient;
+        Patient patient = existingPatient.orElseGet(() -> createPatientFromRequest(request, numSecu));
+
         if (existingPatient.isPresent()) {
-            patient = existingPatient.get();
             patientService.addToWaitingList(patient);
-        } else {
-            patient = new Patient();
-            patient.setNom(request.getParameter("nom"));
-            patient.setPrenom(request.getParameter("prenom"));
-            patient.setDateNaissance(parseDate(request.getParameter("dateNaissance")));
-            patient.setNumSecuriteSociale(numSecu);
-            patient.setTelephone(request.getParameter("telephone"));
-            patient.setAdresse(request.getParameter("adresse"));
-            patient.setMutuelle(request.getParameter("mutuelle"));
-            patient.setAntecedents(request.getParameter("antecedents"));
-            patient.setAllergies(request.getParameter("allergies"));
-            patient.setTraitementsEnCours(request.getParameter("traitementsEnCours"));
-            patient = patientService.create(patient);
         }
 
         SigneVital signeVital = buildSigneVital(request);
         if (signeVital != null) {
-            signeVital.setPatient(patient);
-            Infirmier infirmierConnecte = (Infirmier) request.getSession().getAttribute("infirmier");
-            signeVital.setInfirmier(infirmierConnecte);
-            signeVital.setDatePrise(LocalDateTime.now());
-            signeVitalService.create(signeVital);
+            saveSigneVital(patient, request, signeVital);
         }
 
+        redirectToPatientDetails(request, response, patient);
+    }
+
+    private Patient createPatientFromRequest(HttpServletRequest request, String numSecu) {
+        Patient patient = new Patient();
+        patient.setNom(request.getParameter("nom"));
+        patient.setPrenom(request.getParameter("prenom"));
+        patient.setDateNaissance(parseDate(request.getParameter("dateNaissance")));
+        patient.setNumSecuriteSociale(numSecu);
+        patient.setTelephone(request.getParameter("telephone"));
+        patient.setAdresse(request.getParameter("adresse"));
+        patient.setMutuelle(request.getParameter("mutuelle"));
+        patient.setAntecedents(request.getParameter("antecedents"));
+        patient.setAllergies(request.getParameter("allergies"));
+        patient.setTraitementsEnCours(request.getParameter("traitementsEnCours"));
+        return patientService.create(patient);
+    }
+
+    private void saveSigneVital(Patient patient, HttpServletRequest request, SigneVital signeVital) {
+        signeVital.setPatient(patient);
+        Infirmier infirmierConnecte = (Infirmier) request.getSession().getAttribute("infirmier");
+        signeVital.setInfirmier(infirmierConnecte);
+        signeVital.setDatePrise(LocalDateTime.now());
+        signeVitalService.create(signeVital);
+    }
+
+    private void redirectToPatientDetails(HttpServletRequest request, HttpServletResponse response, Patient patient)
+            throws IOException {
         response.sendRedirect(request.getContextPath() + "/infirmier/patients/" + patient.getId());
     }
 

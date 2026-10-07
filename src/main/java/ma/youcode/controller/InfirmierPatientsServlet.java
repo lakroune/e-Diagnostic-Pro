@@ -58,7 +58,10 @@ public class InfirmierPatientsServlet extends HttpServlet {
             e.printStackTrace();
         }
 
-        response.sendError(HttpServletResponse.SC_NOT_FOUND, "Patient non trouvé");
+        request.setAttribute("errorMessage", "Patient introuvable. Vérifiez l'identifiant ou créez un nouveau patient.");
+        List<Patient> patients = patientService.findAll();
+        request.setAttribute("patients", patients);
+        request.getRequestDispatcher("/WEB-INF/views/infirmier/patients.jsp").forward(request, response);
     }
 
     @Override

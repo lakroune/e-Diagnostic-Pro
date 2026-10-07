@@ -8,6 +8,7 @@ import jakarta.persistence.EntityTransaction;
 import ma.youcode.config.JPAUtil;
 import ma.youcode.dao.PatientDAO;
 import ma.youcode.model.Patient;
+import ma.youcode.model.enums.StatutFile;
 
 public class PatientDAOImpl implements PatientDAO {
 
@@ -38,19 +39,15 @@ public class PatientDAOImpl implements PatientDAO {
     public Optional<Patient> findById(Long id) {
         EntityManager em = JPAUtil.getEntityManager();
         try {
-            Patient p = em.createQuery(
-                    "SELECT DISTINCT p FROM Patient p " +
-                            "LEFT JOIN FETCH p.signesVitaux s " +
-                            "LEFT JOIN FETCH s.infirmier " +
-                            "WHERE p.id = :id",
-                    Patient.class)
-                    .setParameter("id", id)
-                    .getResultStream()
-                    .findFirst()
-                    .orElse(null);
-            return Optional.ofNullable(p);
+            Patient patient = em.find(Patient.class, id);
+            if (patient != null) {
+                patient.getSignesVitaux().size();
+                patient.getFileAttentes().size();
+            }
+            return Optional.ofNullable(patient);
         } catch (Exception e) {
-            return Optional.empty();    
+            e.printStackTrace();
+            return Optional.empty();
         } finally {
             em.close();
         }
@@ -129,7 +126,13 @@ public class PatientDAOImpl implements PatientDAO {
     public List<Patient> getListAttente() {
         EntityManager em = JPAUtil.getEntityManager();
         try {
-            return em.createQuery("SELECT p FROM Patient p WHERE p.enAttente = true", Patient.class)
+            return em.createQuery(
+                    "SELECT DISTINCT p FROM Patient p " +
+                            "JOIN p.fileAttentes f " +
+                            "WHERE f.statut = :statut " +
+                            "ORDER BY f.heureArrivee ASC",
+                    Patient.class)
+                    .setParameter("statut", StatutFile.EN_ATTENTE)
                     .getResultList();
         } finally {
             em.close();

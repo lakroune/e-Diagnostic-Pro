@@ -10,90 +10,107 @@
                 body {
                     margin: 0;
                     font-family: Arial, sans-serif;
+                    background: #f4f6f9;
+                    color: #1f2937;
                 }
 
                 .container {
-                    width: 90%;
-                    margin: 40px auto;
+                    width: 1100px;
+                    max-width: 92%;
+                    margin: 40px auto 60px;
+                }
+
+                .page-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 25px;
                 }
 
                 h1,
                 h2 {
-                    text-align: center;
+                    margin: 0;
+                    color: #111827;
                 }
 
-                table {
-                    width: 100%;
-                    border-collapse: collapse;
-                    margin-top: 20px;
-                    margin-bottom: 20px;
+                .card {
+                    background: #fff;
+                    border: 1px solid #dfe3ea;
+                    border-radius: 10px;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+                    padding: 25px;
+                    margin-bottom: 25px;
                 }
 
-                th,
-                td {
-                    border: 1px solid black;
-                    padding: 10px;
-                    text-align: left;
-                    vertical-align: top;
-                }
-
-                th {
-                    width: 30%;
-                    background: #f5f5f5;
-                }
-
-                p {
-                    margin: 10px 0;
-                }
-
-                label {
-                    display: block;
-                    margin-bottom: 5px;
-                }
-
-                input,
-                textarea,
-                button,
-                select {
-                    width: 100%;
-                    box-sizing: border-box;
-                    padding: 8px;
-                    border: 1px solid black;
-                    font-family: Arial, sans-serif;
-                }
-
-                textarea {
-                    min-height: 80px;
-                    resize: vertical;
-                }
-
-                button {
-                    background: white;
-                    cursor: pointer;
-                }
-
-                form {
-                    margin-top: 15px;
-                }
-
-                .form-grid {
+                .info-grid {
                     display: grid;
-                    grid-template-columns: repeat(2, minmax(250px, 1fr));
-                    gap: 15px;
+                    grid-template-columns: repeat(2, minmax(220px, 1fr));
+                    gap: 18px 25px;
+                }
+
+                .info-item {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 6px;
+                }
+
+                .label {
+                    font-size: 12px;
+                    text-transform: uppercase;
+                    letter-spacing: 0.06em;
+                    color: #6b7280;
+                    font-weight: 700;
+                }
+
+                .value {
+                    font-size: 15px;
+                    color: #111827;
+                    padding: 10px 12px;
+                    background: #f9fafb;
+                    border: 1px solid #e5e7eb;
+                    border-radius: 6px;
+                    min-height: 42px;
                 }
 
                 .full-width {
                     grid-column: 1 / -1;
                 }
 
-                .actions {
-                    display: flex;
-                    gap: 10px;
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
                     margin-top: 15px;
                 }
 
-                a {
-                    color: black;
+                th,
+                td {
+                    border: 1px solid #dfe3ea;
+                    padding: 10px 12px;
+                    text-align: left;
+                    vertical-align: top;
+                }
+
+                th {
+                    background: #f3f4f6;
+                    color: #374151;
+                }
+
+                .back-link {
+                    display: inline-block;
+                    margin-top: 10px;
+                    color: #111827;
+                    text-decoration: none;
+                    font-weight: 600;
+                }
+
+                .back-link:hover {
+                    text-decoration: underline;
+                }
+
+                .empty-state {
+                    margin-top: 16px;
+                    color: #6b7280;
+                    font-style: italic;
                 }
             </style>
         </head>
@@ -105,123 +122,122 @@
             <c:choose>
                 <c:when test="${not empty patient}">
                     <div class="container">
-                        <h1>Détails du Patient</h1>
+                        <div class="page-header">
+                            <h1>Détails du patient</h1>
+                        </div>
 
-                        <table>
-                            <tr>
-                                <th>ID</th>
-                                <td>${patient.id}</td>
-                            </tr>
-                            <tr>
-                                <th>Nom</th>
-                                <td>${patient.nom}</td>
-                            </tr>
-                            <tr>
-                                <th>Prénom</th>
-                                <td>${patient.prenom}</td>
-                            </tr>
-                            <tr>
-                                <th>Date de naissance</th>
-                                <td>${patient.dateNaissance}</td>
-                            </tr>
-                            <tr>
-                                <th>N° sécurité sociale</th>
-                                <td>${not empty patient.numSecuriteSociale ? patient.numSecuriteSociale : 'Non
-                                    renseigné'}</td>
-                            </tr>
-                            <tr>
-                                <th>Téléphone</th>
-                                <td>${not empty patient.telephone ? patient.telephone : 'Non renseigné'}</td>
-                            </tr>
-                            <tr>
-                                <th>Adresse</th>
-                                <td>${not empty patient.adresse ? patient.adresse : 'Non renseignée'}</td>
-                            </tr>
-                            <tr>
-                                <th>Mutuelle</th>
-                                <td>${not empty patient.mutuelle ? patient.mutuelle : 'Non renseignée'}</td>
-                            </tr>
-                            <tr>
-                                <th>Antécédents</th>
-                                <td>${not empty patient.antecedents ? patient.antecedents : 'Aucun'}</td>
-                            </tr>
-                            <tr>
-                                <th>Allergies</th>
-                                <td>${not empty patient.allergies ? patient.allergies : 'Aucune'}</td>
-                            </tr>
-                            <tr>
-                                <th>Traitements en cours</th>
-                                <td>${not empty patient.traitementsEnCours ? patient.traitementsEnCours : 'Aucun'}</td>
-                            </tr>
-                            <tr>
-                                <th>Statut</th>
-                                <td>
-                                    <c:choose>
-                                        <c:when test="${patient.enAttente}">En attente</c:when>
-                                        <c:otherwise>Pris en charge</c:otherwise>
-                                    </c:choose>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Date d'enregistrement</th>
-                                <td>${not empty patient.dateEnregistrement ? patient.dateEnregistrement : 'Non
-                                    renseignée'}</td>
-                            </tr>
-                        </table>
+                        <div class="card">
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <span class="label">Nom</span>
+                                    <span class="value">${patient.nom}</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="label">Prénom</span>
+                                    <span class="value">${patient.prenom}</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="label">Date de naissance</span>
+                                    <span class="value">${patient.dateNaissance}</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="label">N° sécurité sociale</span>
+                                    <span class="value">${not empty patient.numSecuriteSociale ? patient.numSecuriteSociale : 'Non renseigné'}</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="label">Téléphone</span>
+                                    <span class="value">${not empty patient.telephone ? patient.telephone : 'Non renseigné'}</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="label">Adresse</span>
+                                    <span class="value">${not empty patient.adresse ? patient.adresse : 'Non renseignée'}</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="label">Mutuelle</span>
+                                    <span class="value">${not empty patient.mutuelle ? patient.mutuelle : 'Non renseignée'}</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="label">Statut</span>
+                                    <span class="value">
+                                        <c:choose>
+                                            <c:when test="${patient.enAttente}">En attente</c:when>
+                                            <c:otherwise>Pris en charge</c:otherwise>
+                                        </c:choose>
+                                    </span>
+                                </div>
+                                <div class="info-item full-width">
+                                    <span class="label">Antécédents</span>
+                                    <span class="value">${not empty patient.antecedents ? patient.antecedents : 'Aucun'}</span>
+                                </div>
+                                <div class="info-item full-width">
+                                    <span class="label">Allergies</span>
+                                    <span class="value">${not empty patient.allergies ? patient.allergies : 'Aucune'}</span>
+                                </div>
+                                <div class="info-item full-width">
+                                    <span class="label">Traitements en cours</span>
+                                    <span class="value">${not empty patient.traitementsEnCours ? patient.traitementsEnCours : 'Aucun'}</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="label">Date d'enregistrement</span>
+                                    <span class="value">${not empty patient.dateEnregistrement ? patient.dateEnregistrement : 'Non renseignée'}</span>
+                                </div>
+                            </div>
+                        </div>
 
-                        <hr>
+                        <div class="card">
+                            <h2>Historique des signes vitaux</h2>
 
-                        <h2>Historique des Signes Vitaux</h2>
-
-                        <c:choose>
-                            <c:when test="${not empty patient.signesVitaux}">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Date</th>
-                                            <th>Tension</th>
-                                            <th>Fréq. Cardiaque (bpm)</th>
-                                            <th>Température (°C)</th>
-                                            <th>Fréq. Respiratoire</th>
-                                            <th>Poids (kg)</th>
-                                            <th>Taille (cm)</th>
-                                            <th>Infirmier</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <c:forEach var="sv" items="${patient.signesVitaux}">
+                            <c:choose>
+                                <c:when test="${not empty patient.signesVitaux}">
+                                    <table>
+                                        <thead>
                                             <tr>
-                                                <td>${sv.datePrise}</td>
-                                                <td>${sv.tensionArterielle}</td>
-                                                <td>${sv.frequenceCardiaque}</td>
-                                                <td>${sv.temperatureCorporelle}</td>
-                                                <td>${sv.frequenceRespiratoire}</td>
-                                                <td>${sv.poidsKg}</td>
-                                                <td>${sv.tailleCm}</td>
-                                                <td>${sv.infirmier.nom} ${sv.infirmier.prenom}</td>
+                                                <th>Date</th>
+                                                <th>Tension</th>
+                                                <th>Fréq. cardiaque</th>
+                                                <th>Température</th>
+                                                <th>Fréq. respiratoire</th>
+                                                <th>Poids</th>
+                                                <th>Taille</th>
+                                                <th>Infirmier</th>
                                             </tr>
-                                        </c:forEach>
-                                    </tbody>
-                                </table>
-                            </c:when>
-                            <c:otherwise>
-                                <p>Aucun signe vital enregistré pour ce patient.</p>
-                            </c:otherwise>
-                        </c:choose>
+                                        </thead>
+                                        <tbody>
+                                            <c:forEach var="sv" items="${patient.signesVitaux}">
+                                                <tr>
+                                                    <td>${sv.datePrise}</td>
+                                                    <td>${sv.tensionArterielle}</td>
+                                                    <td>${sv.frequenceCardiaque} bpm</td>
+                                                    <td>${sv.temperatureCorporelle} °C</td>
+                                                    <td>${sv.frequenceRespiratoire}</td>
+                                                    <td>${sv.poidsKg} kg</td>
+                                                    <td>${sv.tailleCm} cm</td>
+                                                    <td>${sv.infirmier.nom} ${sv.infirmier.prenom}</td>
+                                                </tr>
+                                            </c:forEach>
+                                        </tbody>
+                                    </table>
+                                </c:when>
+                                <c:otherwise>
+                                    <p class="empty-state">Aucun signe vital enregistré pour ce patient.</p>
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
 
+                        <a class="back-link" href="${pageContext.request.contextPath}/infirmier/patients">← Retour à la liste des patients</a>
+                    </div>
                 </c:when>
+
                 <c:otherwise>
-                    <h1>Patient introuvable</h1>
-                    <p>Aucun patient ne correspond à cet identifiant.</p>
+                    <div class="container">
+                        <div class="card">
+                            <h1>Patient introuvable</h1>
+                            <p class="empty-state">Aucun patient ne correspond à cet identifiant.</p>
+                            <a class="back-link" href="${pageContext.request.contextPath}/infirmier/patients">← Retour à la liste des patients</a>
+                        </div>
+                    </div>
                 </c:otherwise>
             </c:choose>
-
-            <hr>
-
-            <p>
-                <a href="${pageContext.request.contextPath}/infirmier/patients">← Retour à la liste des patients</a>
-            </p>
-
 
         </body>
 

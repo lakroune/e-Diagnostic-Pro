@@ -54,6 +54,12 @@
 
                 <h1>Liste des patients</h1>
 
+                <c:if test="${not empty errorMessage}">
+                    <div style="margin: 15px 0; padding: 12px 14px; border: 1px solid #d1d5db; background: #fff7ed; color: #92400e; font-weight: bold;">
+                        ${errorMessage}
+                    </div>
+                </c:if>
+
                 <table>
 
                     <thead>
