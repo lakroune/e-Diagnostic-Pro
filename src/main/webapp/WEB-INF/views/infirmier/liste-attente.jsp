@@ -65,12 +65,7 @@
                                             renseigné'}</td>
                                         <td>${not empty patient.dateEnregistrement ? patient.dateEnregistrement : 'Non
                                             renseignée'}</td>
-                                        <td>
-                                            <c:choose>
-                                                <c:when test="${patient.enAttente}">En attente</c:when>
-                                                <c:otherwise>Pris en charge</c:otherwise>
-                                            </c:choose>
-                                        </td>
+                                        <td>En attente</td>
                                     </tr>
                                 </c:forEach>
                             </c:when>

@@ -40,10 +40,21 @@ public class PatientService {
     }
 
     public Patient addToWaitingList(Patient patient) {
+        if (patient == null) {
+            return null;
+        }
 
-        boolean alreadyInWaitingList = patient.getFileAttentes() != null
-                &&
-                patient.getFileAttentes().stream()
+        List<FileAttente> fileAttentes = patient.getFileAttentes();
+        if (fileAttentes == null && patient.getId() != null) {
+            Optional<Patient> refreshedPatient = patientDAO.findById(patient.getId());
+            if (refreshedPatient.isPresent()) {
+                patient = refreshedPatient.get();
+            }
+            fileAttentes = patient.getFileAttentes();
+        }
+
+        boolean alreadyInWaitingList = fileAttentes != null
+                && fileAttentes.stream()
                         .anyMatch(file -> file.getStatut() == StatutFile.EN_ATTENTE);
 
         if (!alreadyInWaitingList) {
@@ -53,7 +64,7 @@ public class PatientService {
             fileAttente.setStatut(StatutFile.EN_ATTENTE);
 
             FileAttente savedFile = (new FileAttenteService()).save(fileAttente);
-            if (savedFile != null) {
+            if (savedFile != null && patient.getFileAttentes() != null) {
                 patient.getFileAttentes().add(savedFile);
             }
         }

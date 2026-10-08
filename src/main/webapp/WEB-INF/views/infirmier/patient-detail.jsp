@@ -142,44 +142,56 @@
                                 </div>
                                 <div class="info-item">
                                     <span class="label">N° sécurité sociale</span>
-                                    <span class="value">${not empty patient.numSecuriteSociale ? patient.numSecuriteSociale : 'Non renseigné'}</span>
+                                    <span class="value">${not empty patient.numSecuriteSociale ?
+                                        patient.numSecuriteSociale : 'Non renseigné'}</span>
                                 </div>
                                 <div class="info-item">
                                     <span class="label">Téléphone</span>
-                                    <span class="value">${not empty patient.telephone ? patient.telephone : 'Non renseigné'}</span>
+                                    <span class="value">${not empty patient.telephone ? patient.telephone : 'Non
+                                        renseigné'}</span>
                                 </div>
                                 <div class="info-item">
                                     <span class="label">Adresse</span>
-                                    <span class="value">${not empty patient.adresse ? patient.adresse : 'Non renseignée'}</span>
+                                    <span class="value">${not empty patient.adresse ? patient.adresse : 'Non
+                                        renseignée'}</span>
                                 </div>
                                 <div class="info-item">
                                     <span class="label">Mutuelle</span>
-                                    <span class="value">${not empty patient.mutuelle ? patient.mutuelle : 'Non renseignée'}</span>
+                                    <span class="value">${not empty patient.mutuelle ? patient.mutuelle : 'Non
+                                        renseignée'}</span>
                                 </div>
                                 <div class="info-item">
                                     <span class="label">Statut</span>
-                                    <span class="value">
-                                        <c:choose>
-                                            <c:when test="${patient.enAttente}">En attente</c:when>
-                                            <c:otherwise>Pris en charge</c:otherwise>
-                                        </c:choose>
-                                    </span>
+                                    <c:set var="patientStatus" value="Aucun statut" />
+                                    <c:forEach var="fileAttente" items="${patient.fileAttentes}">
+                                        <c:if test="${fileAttente.statut eq 'EN_ATTENTE'}">
+                                            <c:set var="patientStatus" value="En attente" />
+                                        </c:if>
+                                        <c:if test="${fileAttente.statut eq 'PRIS_EN_CHARGE'}">
+                                            <c:set var="patientStatus" value="Pris en charge" />
+                                        </c:if>
+                                    </c:forEach>
+                                    <span class="value">${patientStatus}</span>
                                 </div>
                                 <div class="info-item full-width">
                                     <span class="label">Antécédents</span>
-                                    <span class="value">${not empty patient.antecedents ? patient.antecedents : 'Aucun'}</span>
+                                    <span class="value">${not empty patient.antecedents ? patient.antecedents :
+                                        'Aucun'}</span>
                                 </div>
                                 <div class="info-item full-width">
                                     <span class="label">Allergies</span>
-                                    <span class="value">${not empty patient.allergies ? patient.allergies : 'Aucune'}</span>
+                                    <span class="value">${not empty patient.allergies ? patient.allergies :
+                                        'Aucune'}</span>
                                 </div>
                                 <div class="info-item full-width">
                                     <span class="label">Traitements en cours</span>
-                                    <span class="value">${not empty patient.traitementsEnCours ? patient.traitementsEnCours : 'Aucun'}</span>
+                                    <span class="value">${not empty patient.traitementsEnCours ?
+                                        patient.traitementsEnCours : 'Aucun'}</span>
                                 </div>
                                 <div class="info-item">
                                     <span class="label">Date d'enregistrement</span>
-                                    <span class="value">${not empty patient.dateEnregistrement ? patient.dateEnregistrement : 'Non renseignée'}</span>
+                                    <span class="value">${not empty patient.dateEnregistrement ?
+                                        patient.dateEnregistrement : 'Non renseignée'}</span>
                                 </div>
                             </div>
                         </div>
@@ -224,7 +236,8 @@
                             </c:choose>
                         </div>
 
-                        <a class="back-link" href="${pageContext.request.contextPath}/infirmier/patients">← Retour à la liste des patients</a>
+                        <a class="back-link" href="${pageContext.request.contextPath}/infirmier/patients">← Retour à la
+                            liste des patients</a>
                     </div>
                 </c:when>
 
@@ -233,7 +246,8 @@
                         <div class="card">
                             <h1>Patient introuvable</h1>
                             <p class="empty-state">Aucun patient ne correspond à cet identifiant.</p>
-                            <a class="back-link" href="${pageContext.request.contextPath}/infirmier/patients">← Retour à la liste des patients</a>
+                            <a class="back-link" href="${pageContext.request.contextPath}/infirmier/patients">← Retour à
+                                la liste des patients</a>
                         </div>
                     </div>
                 </c:otherwise>

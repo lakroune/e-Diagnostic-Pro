@@ -54,6 +54,11 @@ public class AjouterPatientServlet extends HttpServlet {
         String numSecu = request.getParameter("numSecuriteSociale");
         Optional<Patient> existingPatient = patientService.findByNumSecuriteSociale(numSecu);
 
+        if ("save-vitals".equalsIgnoreCase(action)) {
+            saveVitalSignsOnly(request, response, existingPatient, numSecu);
+            return;
+        }
+
         if ("add-to-waiting".equals(action) && existingPatient.isPresent()) {
             Patient patient = existingPatient.get();
             patientService.addToWaitingList(patient);
@@ -73,6 +78,23 @@ public class AjouterPatientServlet extends HttpServlet {
         }
 
         redirectToPatientDetails(request, response, patient);
+    }
+
+    private void saveVitalSignsOnly(HttpServletRequest request, HttpServletResponse response,
+            Optional<Patient> existingPatient, String numSecu) throws IOException {
+        Patient patient = existingPatient.orElseGet(() -> createPatientFromRequest(request, numSecu));
+
+        if (patient == null) {
+            response.sendRedirect(request.getContextPath() + "/infirmier/patients/ajouter");
+            return;
+        }
+
+        SigneVital signeVital = buildSigneVital(request);
+        if (signeVital != null) {
+            saveSigneVital(patient, request, signeVital);
+        }
+
+        response.sendRedirect(request.getContextPath() + "/infirmier/patients/" + patient.getId());
     }
 
     private Patient createPatientFromRequest(HttpServletRequest request, String numSecu) {

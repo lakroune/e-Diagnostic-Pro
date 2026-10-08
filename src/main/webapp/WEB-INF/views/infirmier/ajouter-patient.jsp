@@ -72,6 +72,21 @@
                     cursor: pointer;
                 }
 
+                .action-row {
+                    display: flex;
+                    gap: 12px;
+                    flex-wrap: wrap;
+                }
+
+                .action-row button {
+                    flex: 1;
+                    min-width: 220px;
+                }
+
+                .secondary-btn {
+                    background: #f3f4f6;
+                }
+
                 .alert {
                     border: 1px solid black;
                     padding: 10px 15px;
@@ -112,7 +127,8 @@
                                     uniquement les nouveaux signes vitaux puis ajoutez-le à la file d’attente.
                                 </c:when>
                                 <c:otherwise>
-                                    Aucun patient trouvé. Remplissez le dossier du patient puis validez pour l’ajouter à la
+                                    Aucun patient trouvé. Remplissez le dossier du patient puis validez pour l’ajouter à
+                                    la
                                     file d’attente.
                                 </c:otherwise>
                             </c:choose>
@@ -131,52 +147,61 @@
                                         </div>
                                         <div>
                                             <label for="prenom">Prénom</label>
-                                            <input type="text" id="prenom" name="prenom" value="${patient.prenom}" readonly>
+                                            <input type="text" id="prenom" name="prenom" value="${patient.prenom}"
+                                                readonly>
                                         </div>
                                     </div>
 
                                     <div class="row">
                                         <div>
                                             <label for="dateNaissance">Date de naissance</label>
-                                            <input type="date" id="dateNaissance" name="dateNaissance" value="${patient.dateNaissance}" readonly>
+                                            <input type="date" id="dateNaissance" name="dateNaissance"
+                                                value="${patient.dateNaissance}" readonly>
                                         </div>
                                         <div>
                                             <label for="numSecuriteSocialeForm">NSS</label>
-                                            <input type="text" id="numSecuriteSocialeForm" name="numSecuriteSociale" value="${patient.numSecuriteSociale}" readonly>
+                                            <input type="text" id="numSecuriteSocialeForm" name="numSecuriteSociale"
+                                                value="${patient.numSecuriteSociale}" readonly>
                                         </div>
                                     </div>
 
                                     <div class="row">
                                         <div>
                                             <label for="telephone">Téléphone</label>
-                                            <input type="text" id="telephone" name="telephone" value="${patient.telephone}" readonly>
+                                            <input type="text" id="telephone" name="telephone"
+                                                value="${patient.telephone}" readonly>
                                         </div>
                                         <div>
                                             <label for="adresse">Adresse</label>
-                                            <input type="text" id="adresse" name="adresse" value="${patient.adresse}" readonly>
+                                            <input type="text" id="adresse" name="adresse" value="${patient.adresse}"
+                                                readonly>
                                         </div>
                                     </div>
 
                                     <div class="row">
                                         <div>
                                             <label for="mutuelle">Mutuelle</label>
-                                            <input type="text" id="mutuelle" name="mutuelle" value="${patient.mutuelle}" readonly>
+                                            <input type="text" id="mutuelle" name="mutuelle" value="${patient.mutuelle}"
+                                                readonly>
                                         </div>
                                     </div>
 
                                     <div>
                                         <label for="antecedents">Antécédents</label>
-                                        <textarea id="antecedents" name="antecedents" readonly>${patient.antecedents}</textarea>
+                                        <textarea id="antecedents" name="antecedents"
+                                            readonly>${patient.antecedents}</textarea>
                                     </div>
 
                                     <div>
                                         <label for="allergies">Allergies</label>
-                                        <textarea id="allergies" name="allergies" readonly>${patient.allergies}</textarea>
+                                        <textarea id="allergies" name="allergies"
+                                            readonly>${patient.allergies}</textarea>
                                     </div>
 
                                     <div>
                                         <label for="traitementsEnCours">Traitements en cours</label>
-                                        <textarea id="traitementsEnCours" name="traitementsEnCours" readonly>${patient.traitementsEnCours}</textarea>
+                                        <textarea id="traitementsEnCours" name="traitementsEnCours"
+                                            readonly>${patient.traitementsEnCours}</textarea>
                                     </div>
                                 </div>
                             </c:when>
@@ -191,25 +216,29 @@
                                         </div>
                                         <div>
                                             <label for="prenom">Prénom</label>
-                                            <input type="text" id="prenom" name="prenom" value="${param.prenom}" required>
+                                            <input type="text" id="prenom" name="prenom" value="${param.prenom}"
+                                                required>
                                         </div>
                                     </div>
 
                                     <div class="row">
                                         <div>
                                             <label for="dateNaissance">Date de naissance</label>
-                                            <input type="date" id="dateNaissance" name="dateNaissance" value="${param.dateNaissance}">
+                                            <input type="date" id="dateNaissance" name="dateNaissance"
+                                                value="${param.dateNaissance}">
                                         </div>
                                         <div>
                                             <label for="numSecuriteSocialeForm">NSS</label>
-                                            <input type="text" id="numSecuriteSocialeForm" name="numSecuriteSociale" value="${param.numSecuriteSociale}">
+                                            <input type="text" id="numSecuriteSocialeForm" name="numSecuriteSociale"
+                                                value="${param.numSecuriteSociale}">
                                         </div>
                                     </div>
 
                                     <div class="row">
                                         <div>
                                             <label for="telephone">Téléphone</label>
-                                            <input type="text" id="telephone" name="telephone" value="${param.telephone}">
+                                            <input type="text" id="telephone" name="telephone"
+                                                value="${param.telephone}">
                                         </div>
                                         <div>
                                             <label for="adresse">Adresse</label>
@@ -236,7 +265,8 @@
 
                                     <div>
                                         <label for="traitementsEnCours">Traitements en cours</label>
-                                        <textarea id="traitementsEnCours" name="traitementsEnCours">${param.traitementsEnCours}</textarea>
+                                        <textarea id="traitementsEnCours"
+                                            name="traitementsEnCours">${param.traitementsEnCours}</textarea>
                                     </div>
                                 </div>
                             </c:otherwise>
@@ -259,7 +289,8 @@
                             <div class="row">
                                 <div>
                                     <label for="temperatureCorporelle">Température corporelle (°C)</label>
-                                    <input type="number" step="0.1" id="temperatureCorporelle" name="temperatureCorporelle">
+                                    <input type="number" step="0.1" id="temperatureCorporelle"
+                                        name="temperatureCorporelle">
                                 </div>
 
                                 <div>
@@ -281,14 +312,21 @@
                             </div>
                         </div>
 
-                        <c:choose>
-                            <c:when test="${patientFound}">
-                                <button type="submit" name="action" value="add-to-waiting">Ajouter à la file d'attente</button>
-                            </c:when>
-                            <c:otherwise>
-                                <button type="submit">Créer le dossier et ajouter à la file d'attente</button>
-                            </c:otherwise>
-                        </c:choose>
+                        <div class="action-row">
+                            <button type="submit" name="action" value="save-vitals" class="secondary-btn">Ajouter les
+                                signes vitaux</button>
+
+                            <c:choose>
+                                <c:when test="${patientFound}">
+                                    <button type="submit" name="action" value="add-to-waiting">Ajouter à la file
+                                        d'attente</button>
+                                </c:when>
+                                <c:otherwise>
+                                    <button type="submit" name="action" value="create-and-wait">Créer le dossier et
+                                        ajouter à la file d'attente</button>
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
                     </form>
                 </c:if>
             </div>

@@ -40,11 +40,20 @@ public class PatientDAOImpl implements PatientDAO {
         EntityManager em = JPAUtil.getEntityManager();
         try {
             Patient patient = em.find(Patient.class, id);
-            if (patient != null) {
-                patient.getSignesVitaux().size();
-                patient.getFileAttentes().size();
+            if (patient == null) {
+                return Optional.empty();
             }
-            return Optional.ofNullable(patient);
+
+            patient.getSignesVitaux().size();
+            patient.getFileAttentes().size();
+
+            for (var signeVital : patient.getSignesVitaux()) {
+                if (signeVital.getInfirmier() != null) {
+                    signeVital.getInfirmier().getNom();
+                }
+            }
+
+            return Optional.of(patient);
         } catch (Exception e) {
             e.printStackTrace();
             return Optional.empty();
@@ -58,7 +67,9 @@ public class PatientDAOImpl implements PatientDAO {
         EntityManager em = JPAUtil.getEntityManager();
         try {
             return em.createQuery(
-                    "SELECT p FROM Patient p WHERE p.numSecuriteSociale = :numero",
+                    "SELECT DISTINCT p FROM Patient p " +
+                            "LEFT JOIN FETCH p.fileAttentes f " +
+                            "WHERE p.numSecuriteSociale = :numero",
                     Patient.class)
                     .setParameter("numero", numSecuriteSociale)
                     .getResultStream()
@@ -127,10 +138,13 @@ public class PatientDAOImpl implements PatientDAO {
         EntityManager em = JPAUtil.getEntityManager();
         try {
             return em.createQuery(
-                    "SELECT DISTINCT p FROM Patient p " +
+                    "SELECT p FROM Patient p " +
                             "JOIN p.fileAttentes f " +
                             "WHERE f.statut = :statut " +
-                            "ORDER BY f.heureArrivee ASC",
+                            "GROUP BY p.id, p.nom, p.prenom, p.dateNaissance, p.numSecuriteSociale, " +
+                            "p.telephone, p.adresse, p.mutuelle, p.antecedents, p.allergies, " +
+                            "p.traitementsEnCours, p.dateEnregistrement " +
+                            "ORDER BY MIN(f.heureArrivee) ASC",
                     Patient.class)
                     .setParameter("statut", StatutFile.EN_ATTENTE)
                     .getResultList();
