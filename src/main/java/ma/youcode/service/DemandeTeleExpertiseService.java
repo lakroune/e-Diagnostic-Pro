@@ -1,5 +1,6 @@
 package ma.youcode.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import ma.youcode.dao.DemandeTeleExpertiseDAO;
@@ -8,7 +9,7 @@ import ma.youcode.model.DemandeTeleExpertise;
 
 public class DemandeTeleExpertiseService {
 
-    private DemandeTeleExpertiseDAO demandeTeleExpertiseDAO;
+    private final DemandeTeleExpertiseDAO demandeTeleExpertiseDAO;
 
     public DemandeTeleExpertiseService(DemandeTeleExpertiseDAO demandeTeleExpertiseDAO) {
         this.demandeTeleExpertiseDAO = demandeTeleExpertiseDAO;
@@ -44,6 +45,10 @@ public class DemandeTeleExpertiseService {
 
     public Optional<DemandeTeleExpertise> findById(long id) {
         return demandeTeleExpertiseDAO.findById(id);
+    }
+
+    public List<DemandeTeleExpertise> findAll() {
+        return demandeTeleExpertiseDAO.findAll();
     }
 
     public boolean delete(Long id) {

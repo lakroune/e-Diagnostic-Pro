@@ -1,122 +1,113 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-    <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
-        <!DOCTYPE html>
-        <html>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Ajouter un patient</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #ffffff;
+            color: #111111;
+        }
 
-        <head>
-            <meta charset="UTF-8">
-            <title>Ajouter un patient</title>
+        .container {
+            width: 90%;
+            margin: 40px auto;
+        }
 
-            <style>
-                body {
-                    margin: 0;
-                    font-family: Arial, sans-serif;
-                }
+        h1, h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
 
-                .container {
-                    width: 900px;
-                    max-width: 90%;
-                    margin: 40px auto;
-                }
+        .search-box, .form-card {
+            border: 1px solid #000000;
+            padding: 15px;
+            background: #ffffff;
+            margin-bottom: 20px;
+        }
 
-                h1,
-                h2 {
-                    text-align: center;
-                    margin-bottom: 20px;
-                }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
 
-                .search-box,
-                .form-card {
-                    border: 1px solid black;
-                    padding: 20px;
-                    background: white;
-                    margin-bottom: 25px;
-                }
+        td {
+            padding: 8px;
+            vertical-align: top;
+        }
 
-                .search-row,
-                .row {
-                    display: grid;
-                    grid-template-columns: repeat(2, minmax(250px, 1fr));
-                    gap: 15px;
-                }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
 
-                form {
-                    display: grid;
-                    gap: 15px;
-                }
+        input, textarea, button, select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 8px;
+            border: 1px solid #000000;
+            background: #ffffff;
+            font-family: Arial, sans-serif;
+        }
 
-                label {
-                    display: block;
-                    margin-bottom: 5px;
-                    font-weight: bold;
-                }
+        textarea {
+            height: 80px;
+            resize: vertical;
+        }
 
-                input,
-                textarea,
-                button {
-                    width: 100%;
-                    padding: 8px;
-                    box-sizing: border-box;
-                    border: 1px solid black;
-                    background: white;
-                    font-family: Arial, sans-serif;
-                }
+        button {
+            cursor: pointer;
+        }
 
-                textarea {
-                    height: 80px;
-                    resize: vertical;
-                }
+        .action-row {
+            margin-top: 20px;
+            text-align: center;
+        }
 
-                button {
-                    cursor: pointer;
-                }
+        .action-row button {
+            width: auto;
+            min-width: 230px;
+            margin: 5px;
+        }
 
-                .action-row {
-                    display: flex;
-                    gap: 12px;
-                    flex-wrap: wrap;
-                }
+        .alert {
+            border: 1px solid #000000;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            background: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <jsp:include page="menu.jsp" />
 
-                .action-row button {
-                    flex: 1;
-                    min-width: 220px;
-                }
+    <div class="container">
+        <h1>Étape 1 : Recherche du patient</h1>
 
-                .secondary-btn {
-                    background: #f3f4f6;
-                }
-
-                .alert {
-                    border: 1px solid black;
-                    padding: 10px 15px;
-                    margin-bottom: 15px;
-                    background: #f6f6f6;
-                }
-            </style>
-        </head>
-
-        <body>
-
-            <jsp:include page="menu.jsp" />
-
-            <div class="container">
-                <h1>Étape 1 : Recherche du patient</h1>
-
-                <div class="search-box">
-                    <form method="get" action="${pageContext.request.contextPath}/infirmier/patients/ajouter">
-                        <div class="search-row">
-                            <div>
-                                <label for="numSecuriteSociale">Numéro de sécurité sociale</label>
-                                <input type="text" id="numSecuriteSociale" name="numSecuriteSociale"
-                                    value="${param.numSecuriteSociale}" placeholder="Rechercher un patient par NSS">
-                            </div>
-                            <div>
-                                <button type="submit">Rechercher</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+        <div class="search-box">
+            <form method="get" action="${pageContext.request.contextPath}/infirmier/patients/ajouter">
+                <table>
+                    <tr>
+                        <td style="width: 70%;">
+                            <label for="numSecuriteSociale">Numéro de sécurité sociale</label>
+                            <input type="text" id="numSecuriteSociale" name="numSecuriteSociale"
+                                value="${param.numSecuriteSociale}" placeholder="Rechercher un patient par NSS">
+                        </td>
+                        <td>
+                            <label>&nbsp;</label>
+                            <button type="submit">Rechercher</button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
 
                 <c:if test="${not empty param.numSecuriteSociale}">
                     <c:if test="${not empty patientFound}">

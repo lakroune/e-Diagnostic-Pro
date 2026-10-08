@@ -1,235 +1,205 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-    <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
-        <!DOCTYPE html>
-        <html>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Ajouter un utilisateur</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #ffffff;
+            color: #111111;
+        }
 
-        <head>
-            <meta charset="UTF-8">
-            <title>Ajouter un utilisateur</title>
+        .container {
+            width: 85%;
+            margin: 40px auto;
+        }
 
-            <style>
-                body {
-                    margin: 0;
-                    font-family: Arial, sans-serif;
-                }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
 
-                .menu {
-                    border-bottom: 1px solid black;
-                    padding: 20px;
-                    text-align: center;
-                }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
 
-                .menu a {
-                    margin: 0 15px;
-                    text-decoration: none;
-                    color: black;
-                }
+        td {
+            padding: 10px;
+            vertical-align: top;
+        }
 
-                .container {
-                    width: 80%;
-                    margin: 50px auto;
-                }
+        input, select, button {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 8px 10px;
+            border: 1px solid #000000;
+            font-size: 14px;
+            background: #ffffff;
+        }
 
-                h1 {
-                    text-align: center;
-                }
+        .extra-fields {
+            display: none;
+            margin-top: 10px;
+        }
 
-                form {
-                    margin-top: 20px;
-                }
+        .extra-fields.active {
+            display: block;
+        }
 
-                .row {
-                    display: flex;
-                    gap: 20px;
-                    margin-bottom: 15px;
-                }
+        .actions {
+            margin-top: 20px;
+            text-align: center;
+        }
 
-                label {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 8px;
-                    width: 100%;
-                }
+        .btn {
+            display: inline-block;
+            min-width: 180px;
+            margin: 5px;
+            padding: 10px 14px;
+            border: 1px solid #000000;
+            background: #ffffff;
+            color: #000000;
+            text-decoration: none;
+            cursor: pointer;
+        }
 
-                input,
-                select,
-                button {
-                    padding: 8px 10px;
-                    font-size: 14px;
-                    border: 1px solid black;
-                }
+        .alert, .success {
+            border: 1px solid #000000;
+            padding: 10px;
+            margin-bottom: 15px;
+            background: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <table width="100%" border="0" cellpadding="8" cellspacing="0">
+        <tr>
+            <td bgcolor="#f2f2f2" valign="middle">
+                <font face="Arial, Helvetica, sans-serif" size="2">
+                    <b>Menu Admin :</b>
+                    <a href="${pageContext.request.contextPath}/admin/dashboard">Dashboard</a>
+                    |
+                    <a href="${pageContext.request.contextPath}/admin/utilisateurs/ajouter">Ajouter un utilisateur</a>
+                    |
+                    <a href="${pageContext.request.contextPath}/logout">Déconnexion</a>
+                </font>
+            </td>
+        </tr>
+    </table>
+    <hr>
 
-                .extra-fields {
-                    display: none;
-                    margin-top: 15px;
-                }
+    <div class="container">
+        <h1>Ajouter un utilisateur</h1>
 
-                .extra-fields.active {
-                    display: block;
-                }
+        <c:if test="${not empty error}">
+            <div class="alert">${error}</div>
+        </c:if>
 
-                .actions {
-                    margin-top: 20px;
-                    display: flex;
-                    gap: 10px;
-                }
+        <c:if test="${not empty success}">
+            <div class="success">${success}</div>
+        </c:if>
 
-                .btn {
-                    padding: 10px 20px;
-                    border: 1px solid black;
-                    background: white;
-                    color: black;
-                    text-decoration: none;
-                    display: inline-block;
-                    cursor: pointer;
-                }
+        <form method="post" action="${pageContext.request.contextPath}/admin/utilisateurs/ajouter">
+            <table>
+                <tr>
+                    <td><label>Nom</label></td>
+                    <td><input type="text" name="nom" required></td>
+                    <td><label>Prénom</label></td>
+                    <td><input type="text" name="prenom" required></td>
+                </tr>
+                <tr>
+                    <td><label>Email</label></td>
+                    <td><input type="email" name="email" required></td>
+                    <td><label>Téléphone</label></td>
+                    <td><input type="text" name="telephone"></td>
+                </tr>
+                <tr>
+                    <td><label>Mot de passe</label></td>
+                    <td><input type="password" name="motDePasse" required></td>
+                    <td><label>Type utilisateur</label></td>
+                    <td>
+                        <select name="role" id="roleSelect" required>
+                            <option value="">-- Sélectionner --</option>
+                            <c:forEach var="role" items="${roles}">
+                                <option value="${role}">${role}</option>
+                            </c:forEach>
+                        </select>
+                    </td>
+                </tr>
+            </table>
 
-                .alert {
-                    border: 1px solid black;
-                    padding: 10px;
-                    margin-bottom: 15px;
-                }
-
-                .success {
-                    border: 1px solid black;
-                    padding: 10px;
-                    margin-bottom: 15px;
-                    background: #f3f3f3;
-                }
-            </style>
-        </head>
-
-        <body>
-            <nav class="menu">
-                <a href="${pageContext.request.contextPath}/admin/dashboard">Dashboard</a>
-                <a href="${pageContext.request.contextPath}/admin/utilisateurs/ajouter">Ajouter un utilisateur</a>
-                <a href="${pageContext.request.contextPath}/logout">Déconnexion</a>
-            </nav>
-
-            <div class="container">
-                <h1>Ajouter un utilisateur</h1>
-
-                <c:if test="${not empty error}">
-                    <div class="alert">${error}</div>
-                </c:if>
-
-                <c:if test="${not empty success}">
-                    <div class="success">${success}</div>
-                </c:if>
-
-                <form method="post" action="${pageContext.request.contextPath}/admin/utilisateurs/ajouter">
-                    <div class="row">
-                        <label>
-                            Nom
-                            <input type="text" name="nom" required>
-                        </label>
-
-                        <label>
-                            Prénom
-                            <input type="text" name="prenom" required>
-                        </label>
-                    </div>
-
-                    <div class="row">
-                        <label>
-                            Email
-                            <input type="email" name="email" required>
-                        </label>
-
-                        <label>
-                            Téléphone
-                            <input type="text" name="telephone">
-                        </label>
-                    </div>
-
-                    <div class="row">
-                        <label>
-                            Mot de passe
-                            <input type="password" name="motDePasse" required>
-                        </label>
-
-                        <label>
-                            Type utilisateur
-                            <select name="role" id="roleSelect" required>
-                                <option value="">-- Sélectionner --</option>
-                                <c:forEach var="role" items="${roles}">
-                                    <option value="${role}">${role}</option>
-                                </c:forEach>
-                            </select>
-                        </label>
-                    </div>
-
-                    <div id="infirmierFields" class="extra-fields">
-                        <div class="row">
-                            <label>
-                                Matricule professionnel
-                                <input type="text" name="matriculePro">
-                            </label>
-                        </div>
-                    </div>
-
-                    <div id="generalisteFields" class="extra-fields">
-                        <div class="row">
-                            <label>
-                                Matricule d'ordre
-                                <input type="text" name="matriculeOrdre">
-                            </label>
-                        </div>
-                    </div>
-
-                    <div id="specialisteFields" class="extra-fields">
-                        <div class="row">
-                            <label>
-                                Spécialité
-                                <select name="specialite">
-                                    <option value="">-- Sélectionner --</option>
-                                    <c:forEach var="specialite" items="${specialites}">
-                                        <option value="${specialite}">${specialite}</option>
-                                    </c:forEach>
-                                </select>
-                            </label>
-
-                            <label>
-                                Tarif expertise
-                                <input type="number" step="0.01" name="tarifExpertise">
-                            </label>
-                        </div>
-
-                        <div class="row">
-                            <label>
-                                Durée consultation (minutes)
-                                <input type="number" min="15" name="dureeConsultationMin" value="30">
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="actions">
-                        <button class="btn" type="submit">Créer l'utilisateur</button>
-                        <a class="btn" href="${pageContext.request.contextPath}/admin/dashboard">Retour</a>
-                    </div>
-                </form>
+            <div id="infirmierFields" class="extra-fields">
+                <table>
+                    <tr>
+                        <td style="width: 25%;"><label>Matricule professionnel</label></td>
+                        <td><input type="text" name="matriculePro"></td>
+                    </tr>
+                </table>
             </div>
 
-            <script>
-                const roleSelect = document.getElementById('roleSelect');
-                const fieldSets = {
-                    INFIRMIER: document.getElementById('infirmierFields'),
-                    GENERALISTE: document.getElementById('generalisteFields'),
-                    SPECIALISTE: document.getElementById('specialisteFields')
-                };
+            <div id="generalisteFields" class="extra-fields">
+                <table>
+                    <tr>
+                        <td style="width: 25%;"><label>Matricule d'ordre</label></td>
+                        <td><input type="text" name="matriculeOrdre"></td>
+                    </tr>
+                </table>
+            </div>
 
-                function toggleRoleFields() {
-                    const selectedRole = roleSelect.value;
-                    Object.values(fieldSets).forEach(field => field.classList.remove('active'));
-                    if (fieldSets[selectedRole]) {
-                        fieldSets[selectedRole].classList.add('active');
-                    }
-                }
+            <div id="specialisteFields" class="extra-fields">
+                <table>
+                    <tr>
+                        <td><label>Spécialité</label></td>
+                        <td>
+                            <select name="specialite">
+                                <option value="">-- Sélectionner --</option>
+                                <c:forEach var="specialite" items="${specialites}">
+                                    <option value="${specialite}">${specialite}</option>
+                                </c:forEach>
+                            </select>
+                        </td>
+                        <td><label>Tarif expertise</label></td>
+                        <td><input type="number" step="0.01" name="tarifExpertise"></td>
+                    </tr>
+                    <tr>
+                        <td><label>Durée consultation (minutes)</label></td>
+                        <td colspan="3"><input type="number" min="15" name="dureeConsultationMin" value="30"></td>
+                    </tr>
+                </table>
+            </div>
 
-                roleSelect.addEventListener('change', toggleRoleFields);
-                toggleRoleFields();
-            </script>
-        </body>
+            <div class="actions">
+                <button type="submit" class="btn">Créer l'utilisateur</button>
+                <a class="btn" href="${pageContext.request.contextPath}/admin/dashboard">Retour</a>
+            </div>
+        </form>
+    </div>
 
-        </html>
+    <script>
+        const roleSelect = document.getElementById('roleSelect');
+        const fieldSets = {
+            INFIRMIER: document.getElementById('infirmierFields'),
+            GENERALISTE: document.getElementById('generalisteFields'),
+            SPECIALISTE: document.getElementById('specialisteFields')
+        };
+
+        function toggleRoleFields() {
+            const selectedRole = roleSelect.value;
+            Object.values(fieldSets).forEach(field => field.classList.remove('active'));
+            if (fieldSets[selectedRole]) {
+                fieldSets[selectedRole].classList.add('active');
+            }
+        }
+
+        roleSelect.addEventListener('change', toggleRoleFields);
+        toggleRoleFields();
+    </script>
+</body>
+</html>

@@ -36,7 +36,6 @@ public class DemandeTeleExpertiseDAOImpl implements DemandeTeleExpertiseDAO {
         try {
             DemandeTeleExpertise demande = em.createQuery(
                     "SELECT d FROM DemandeTeleExpertise d " +
-                            "LEFT JOIN FETCH d.medecinGeneraliste " +
                             "LEFT JOIN FETCH d.medecinSpecialiste " +
                             "LEFT JOIN FETCH d.consultation " +
                             "LEFT JOIN FETCH d.creneau " +
@@ -99,8 +98,9 @@ public class DemandeTeleExpertiseDAOImpl implements DemandeTeleExpertiseDAO {
         try {
             return em.createQuery(
                     "SELECT DISTINCT d FROM DemandeTeleExpertise d " +
-                            "LEFT JOIN FETCH d.medecinGeneraliste " +
-                            "LEFT JOIN FETCH d.medecinSpecialiste",
+                            "LEFT JOIN FETCH d.medecinSpecialiste " +
+                            "LEFT JOIN FETCH d.consultation " +
+                            "LEFT JOIN FETCH d.creneau",
                     DemandeTeleExpertise.class)
                     .getResultList();
         } finally {
