@@ -71,6 +71,21 @@
             text-align: center;
             color: #555;
         }
+
+        .dossier-btn {
+            display: inline-block;
+            background: #111827;
+            color: #fff;
+            text-decoration: none;
+            border: 1px solid #111827;
+            padding: 8px 14px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .dossier-btn:hover {
+            background: #1f2937;
+        }
     </style>
 
 </head>
@@ -93,6 +108,7 @@
                                 <th>Heure d'arrivée</th>
                                 <th>Signes vitaux</th>
                                 <th>N° sécurité sociale</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -117,6 +133,9 @@
                                         </c:choose>
                                     </td>
                                     <td>${patient.numSecuriteSociale}</td>
+                                    <td>
+                                        <a class="dossier-btn" href="${pageContext.request.contextPath}/medecin/dossier/${patient.id}">Dossier</a>
+                                    </td>
                                 </tr>
                             </c:forEach>
                         </tbody>

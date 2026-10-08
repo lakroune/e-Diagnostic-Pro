@@ -153,6 +153,13 @@ public class PatientDAOImpl implements PatientDAO {
             for (FileAttente fileAttente : fileAttentes) {
                 Patient patient = fileAttente.getPatient();
                 if (patient != null) {
+                    patient.getFileAttentes().size();
+                    patient.getSignesVitaux().size();
+                    for (var signe : patient.getSignesVitaux()) {
+                        if (signe.getInfirmier() != null) {
+                            signe.getInfirmier().getNom();
+                        }
+                    }
                     patientsParId.putIfAbsent(patient.getId(), patient);
                 }
             }

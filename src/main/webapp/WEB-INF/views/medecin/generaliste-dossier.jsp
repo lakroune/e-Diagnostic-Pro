@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -103,43 +104,43 @@
             <table>
                 <tr>
                     <th>Nom</th>
-                    <td>Martin</td>
+                    <td>${patient.nom}</td>
                 </tr>
                 <tr>
                     <th>Prénom</th>
-                    <td>Sofia</td>
+                    <td>${patient.prenom}</td>
                 </tr>
                 <tr>
                     <th>Date de naissance</th>
-                    <td>15/03/1988</td>
+                    <td>${patient.dateNaissance}</td>
                 </tr>
                 <tr>
                     <th>N° sécurité sociale</th>
-                    <td>188-038-123-456</td>
+                    <td>${patient.numSecuriteSociale}</td>
                 </tr>
                 <tr>
                     <th>Téléphone</th>
-                    <td>0666554433</td>
+                    <td>${patient.telephone}</td>
                 </tr>
                 <tr>
                     <th>Adresse</th>
-                    <td>12 rue de la Santé, Casablanca</td>
+                    <td>${patient.adresse}</td>
                 </tr>
                 <tr>
                     <th>Mutuelle</th>
-                    <td>Axa Santé</td>
+                    <td>${patient.mutuelle}</td>
                 </tr>
                 <tr>
                     <th>Antécédents</th>
-                    <td>Hypertension artérielle</td>
+                    <td>${patient.antecedents}</td>
                 </tr>
                 <tr>
                     <th>Allergies</th>
-                    <td>Aucune</td>
+                    <td>${patient.allergies}</td>
                 </tr>
                 <tr>
                     <th>Traitements en cours</th>
-                    <td>Amoxicilline, vitamine C</td>
+                    <td>${patient.traitementsEnCours}</td>
                 </tr>
             </table>
         </div>
@@ -159,15 +160,26 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>07/10/2026 08:30</td>
-                        <td>12/8</td>
-                        <td>78 bpm</td>
-                        <td>36,8 °C</td>
-                        <td>18 /min</td>
-                        <td>68 kg</td>
-                        <td>165 cm</td>
-                    </tr>
+                    <c:choose>
+                        <c:when test="${not empty patient.signesVitaux}">
+                            <c:forEach var="signe" items="${patient.signesVitaux}">
+                                <tr>
+                                    <td>${signe.datePrise}</td>
+                                    <td>${signe.tensionArterielle}</td>
+                                    <td>${signe.frequenceCardiaque} bpm</td>
+                                    <td>${signe.temperatureCorporelle} °C</td>
+                                    <td>${signe.frequenceRespiratoire} /min</td>
+                                    <td>${signe.poidsKg} kg</td>
+                                    <td>${signe.tailleCm} cm</td>
+                                </tr>
+                            </c:forEach>
+                        </c:when>
+                        <c:otherwise>
+                            <tr>
+                                <td colspan="7">Aucun signe vital enregistré pour ce patient.</td>
+                            </tr>
+                        </c:otherwise>
+                    </c:choose>
                 </tbody>
             </table>
         </div>
