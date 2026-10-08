@@ -7,6 +7,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import ma.youcode.config.JPAUtil;
 import ma.youcode.dao.PatientDAO;
+import ma.youcode.model.FileAttente;
 import ma.youcode.model.Patient;
 import ma.youcode.model.enums.StatutFile;
 
@@ -137,17 +138,26 @@ public class PatientDAOImpl implements PatientDAO {
     public List<Patient> getListAttente() {
         EntityManager em = JPAUtil.getEntityManager();
         try {
-            return em.createQuery(
-                    "SELECT p FROM Patient p " +
-                            "JOIN p.fileAttentes f " +
+            List<FileAttente> fileAttentes = em.createQuery(
+                    "SELECT DISTINCT f FROM FileAttente f " +
+                            "JOIN FETCH f.patient p " +
+                            "LEFT JOIN FETCH p.signesVitaux s " +
+                            "LEFT JOIN FETCH s.infirmier i " +
                             "WHERE f.statut = :statut " +
-                            "GROUP BY p.id, p.nom, p.prenom, p.dateNaissance, p.numSecuriteSociale, " +
-                            "p.telephone, p.adresse, p.mutuelle, p.antecedents, p.allergies, " +
-                            "p.traitementsEnCours, p.dateEnregistrement " +
-                            "ORDER BY MIN(f.heureArrivee) ASC",
-                    Patient.class)
+                            "ORDER BY f.heureArrivee ASC",
+                    FileAttente.class)
                     .setParameter("statut", StatutFile.EN_ATTENTE)
                     .getResultList();
+
+            java.util.LinkedHashMap<Long, Patient> patientsParId = new java.util.LinkedHashMap<>();
+            for (FileAttente fileAttente : fileAttentes) {
+                Patient patient = fileAttente.getPatient();
+                if (patient != null) {
+                    patientsParId.putIfAbsent(patient.getId(), patient);
+                }
+            }
+
+            return new java.util.ArrayList<>(patientsParId.values());
         } finally {
             em.close();
         }

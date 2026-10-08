@@ -22,8 +22,9 @@ public class MedecinDashboardServlet extends HttpServlet {
             HttpServletResponse response)
             throws ServletException, IOException {
 
-        List<Patient> patientsDuJour = patientService.getPatientsDuJour();
-        request.setAttribute("patientsDuJour", patientsDuJour);
+        List<Patient> patientsEnAttente = patientService.getListAttente();
+        request.setAttribute("patientsEnAttente", patientsEnAttente);
+        request.setAttribute("patientsDuJour", patientsEnAttente);
 
         request.getRequestDispatcher(
                 "/WEB-INF/views/medecin/dashboard.jsp").forward(request, response);

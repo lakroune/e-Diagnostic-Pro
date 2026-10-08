@@ -80,10 +80,10 @@
     <jsp:include page="menu.jsp" />
 
     <div class="container">
-        <h1>Patients du jour</h1>
+        <h1>Patients en attente</h1>
 
         <c:choose>
-            <c:when test="${not empty patientsDuJour}">
+            <c:when test="${not empty patientsEnAttente}">
                 <div class="table-wrap">
                     <table>
                         <thead>
@@ -96,11 +96,17 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <c:forEach var="patient" items="${patientsDuJour}">
+                            <c:forEach var="patient" items="${patientsEnAttente}">
                                 <tr>
                                     <td>${patient.nom}</td>
                                     <td>${patient.prenom}</td>
-                                    <td>${patient.dateEnregistrement.toLocalTime()}</td>
+                                    <td>
+                                        <c:forEach var="fileAttente" items="${patient.fileAttentes}">
+                                            <c:if test="${fileAttente.statut eq 'EN_ATTENTE'}">
+                                                ${fileAttente.heureArrivee.toLocalTime()}
+                                            </c:if>
+                                        </c:forEach>
+                                    </td>
                                     <td>
                                         <c:choose>
                                             <c:when test="${not empty patient.signesVitaux}">
@@ -119,7 +125,7 @@
             </c:when>
             <c:otherwise>
                 <div class="empty">
-                    Aucun patient enregistré aujourd'hui.
+                    Aucun patient en attente pour le moment.
                 </div>
             </c:otherwise>
         </c:choose>
