@@ -54,6 +54,28 @@ public class FileAttenteService {
         return fileAttenteDAO.findAll();
     }
 
+    public List<FileAttente> findByPatientId(Long patientId) {
+        return fileAttenteDAO.findByPatientId(patientId);
+    }
+
+    public int prendreEnCharge(Long patientId) {
+        if (patientId == null) {
+            return 0;
+        }
+
+        int updatedCount = 0;
+        for (FileAttente fileAttente : fileAttenteDAO.findByPatientId(patientId)) {
+            if (fileAttente == null || fileAttente.getStatut() != StatutFile.EN_ATTENTE) {
+                continue;
+            }
+            fileAttente.setStatut(StatutFile.PRIS_EN_CHARGE);
+            if (fileAttenteDAO.update(fileAttente) != null) {
+                updatedCount++;
+            }
+        }
+        return updatedCount;
+    }
+
     public FileAttente update(Long id, FileAttente fileAttenteDetails) {
         FileAttente existing = fileAttenteDAO.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("File d'attente non trouvée avec l'ID : " + id));

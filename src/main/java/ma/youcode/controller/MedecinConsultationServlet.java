@@ -13,18 +13,21 @@ import ma.youcode.dao.impl.ConsultationDAOImpl;
 import ma.youcode.model.Consultation;
 import ma.youcode.model.Patient;
 import ma.youcode.model.enums.StatutConsultation;
+import ma.youcode.service.FileAttenteService;
 import ma.youcode.service.PatientService;
 
 @WebServlet("/medecin/consultation")
 public class MedecinConsultationServlet extends HttpServlet {
 
     private PatientService patientService;
+    private FileAttenteService fileAttenteService;
     private ConsultationDAOImpl consultationDAO;
 
     @Override
     public void init() throws ServletException {
         super.init();
         this.patientService = new PatientService();
+        this.fileAttenteService = new FileAttenteService();
         this.consultationDAO = new ConsultationDAOImpl();
     }
 
@@ -96,6 +99,7 @@ public class MedecinConsultationServlet extends HttpServlet {
         }
 
         consultationDAO.save(consultation);
+        fileAttenteService.prendreEnCharge(patientId);
 
         if ("demander_avis_specialiste".equalsIgnoreCase(action)) {
             response.sendRedirect(request.getContextPath() + "/medecin/tele-expertise?patientId=" + patientId);

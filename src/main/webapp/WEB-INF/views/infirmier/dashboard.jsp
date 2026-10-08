@@ -42,7 +42,7 @@
                     |
                     <a href="${pageContext.request.contextPath}/infirmier/patients">Liste des patients</a>
                     |
-                    <a href="${pageContext.request.contextPath}/infirmier/attente">Liste d'attente</a>
+                    <a href="${pageContext.request.contextPath}/infirmier/liste-attente">Liste d'attente</a>
                     |
                     <a href="${pageContext.request.contextPath}/logout">Déconnexion</a>
                 </font>

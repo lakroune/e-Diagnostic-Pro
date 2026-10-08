@@ -38,12 +38,20 @@ public class InfirmierPatientsServlet extends HttpServlet {
         }
 
         try {
-            String[] pathSplit = path.split("/");
-            String idPart = pathSplit.length > 1 ? pathSplit[1] : null;
+            String cleanPath = path == null ? "" : path.trim();
+            if (cleanPath.startsWith("/")) {
+                cleanPath = cleanPath.substring(1);
+            }
+            String[] pathSplit = cleanPath.split("/");
+            String idPart = pathSplit.length > 0 ? pathSplit[0] : null;
+
+            System.out.println("[DEBUG] pathInfo=" + path + " => idPart=" + idPart);
 
             if (idPart != null && !idPart.trim().isEmpty()) {
-                Long idPatient = Long.parseLong(idPart);
+                Long idPatient = Long.parseLong(idPart.trim());
                 Optional<Patient> patient = patientService.findById(idPatient);
+
+                System.out.println("[DEBUG] patient found for id=" + idPatient + " => " + patient.isPresent());
 
                 if (patient.isPresent()) {
                     request.setAttribute("patient", patient.get());
@@ -58,7 +66,8 @@ public class InfirmierPatientsServlet extends HttpServlet {
             e.printStackTrace();
         }
 
-        request.setAttribute("errorMessage", "Patient introuvable. Vérifiez l'identifiant ou créez un nouveau patient.");
+        request.setAttribute("errorMessage",
+                "Patient introuvable. Vérifiez l'identifiant ou créez un nouveau patient.");
         List<Patient> patients = patientService.findAll();
         request.setAttribute("patients", patients);
         request.getRequestDispatcher("/WEB-INF/views/infirmier/patients.jsp").forward(request, response);

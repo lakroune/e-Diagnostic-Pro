@@ -40,13 +40,20 @@ public class PatientDAOImpl implements PatientDAO {
     public Optional<Patient> findById(Long id) {
         EntityManager em = JPAUtil.getEntityManager();
         try {
-            Patient patient = em.find(Patient.class, id);
+            Patient patient = em.createQuery(
+                    "SELECT p FROM Patient p WHERE p.id = :id",
+                    Patient.class)
+                    .setParameter("id", id)
+                    .getResultStream()
+                    .findFirst()
+                    .orElse(null);
+
             if (patient == null) {
                 return Optional.empty();
             }
 
-            patient.getSignesVitaux().size();
             patient.getFileAttentes().size();
+            patient.getSignesVitaux().size();
 
             for (var signeVital : patient.getSignesVitaux()) {
                 if (signeVital.getInfirmier() != null) {

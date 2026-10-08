@@ -13,6 +13,8 @@ public interface FileAttenteDAO {
 
     List<FileAttente> findAll();
 
+    List<FileAttente> findByPatientId(Long patientId);
+
     FileAttente update(FileAttente fileAttente);
 
     boolean delete(FileAttente fileAttente);

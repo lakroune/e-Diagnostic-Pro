@@ -54,6 +54,23 @@ public class FileAttenteDAOImpl implements FileAttenteDAO {
     }
 
     @Override
+    public List<FileAttente> findByPatientId(Long patientId) {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            if (patientId == null) {
+                return java.util.Collections.emptyList();
+            }
+            return em.createQuery(
+                    "SELECT f FROM FileAttente f WHERE f.patient.id = :patientId ORDER BY f.heureArrivee ASC",
+                    FileAttente.class)
+                    .setParameter("patientId", patientId)
+                    .getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
     public FileAttente update(FileAttente fileAttente) {
         EntityManager em = JPAUtil.getEntityManager();
         EntityTransaction tx = em.getTransaction();

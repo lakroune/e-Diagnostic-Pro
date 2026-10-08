@@ -184,8 +184,7 @@
                             <p>
                                 <font face="Arial, Helvetica, sans-serif" size="2">
                                     <label for="motif">Motif de consultation :</label><br>
-                                    <input type="text" id="motif" name="motif" value="Fièvre et douleurs thoraciques"
-                                        width="300" height="30" />
+                                    <input type="text" id="motif" name="motif" value=" " width="300" height="30" />
                                 </font>
                             </p>
 
