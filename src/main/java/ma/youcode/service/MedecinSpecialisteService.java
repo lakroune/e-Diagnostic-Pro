@@ -1,5 +1,6 @@
 package ma.youcode.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import ma.youcode.dao.MedecinSpecialisteDAO;
@@ -49,5 +50,9 @@ public class MedecinSpecialisteService {
 
     public Optional<MedecinSpecialiste> findById(long id) {
         return medecinSpecialisteDAO.findById(id);
+    }
+
+    public List<MedecinSpecialiste> findAll() {
+        return medecinSpecialisteDAO.findAll();
     }
 }

@@ -36,7 +36,11 @@ public class MedecinSpecialisteDAOImpl implements MedecinSpecialisteDAO {
         EntityManager em = JPAUtil.getEntityManager();
         try {
             MedecinSpecialiste medecin = em.find(MedecinSpecialiste.class, id);
-            return Optional.ofNullable(medecin);
+            if (medecin == null) {
+                return Optional.empty();
+            }
+            medecin.getCreneaux().size();
+            return Optional.of(medecin);
         } finally {
             em.close();
         }
@@ -87,8 +91,13 @@ public class MedecinSpecialisteDAOImpl implements MedecinSpecialisteDAO {
     public List<MedecinSpecialiste> findAll() {
         EntityManager em = JPAUtil.getEntityManager();
         try {
-            return em.createQuery("SELECT m FROM MedecinSpecialiste m", MedecinSpecialiste.class)
+            List<MedecinSpecialiste> medecins = em.createQuery(
+                    "SELECT m FROM MedecinSpecialiste m", MedecinSpecialiste.class)
                     .getResultList();
+            for (MedecinSpecialiste medecin : medecins) {
+                medecin.getCreneaux().size();
+            }
+            return medecins;
         } finally {
             em.close();
         }
