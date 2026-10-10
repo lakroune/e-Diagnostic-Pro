@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpSession;
 import ma.youcode.model.DemandeTeleExpertise;
 import ma.youcode.model.Utilisateur;
 import ma.youcode.model.enums.Role;
+import ma.youcode.model.enums.StatutExpertise;
 import ma.youcode.service.DemandeTeleExpertiseService;
 
 @WebServlet("/specialiste/dashboard")
@@ -47,7 +48,8 @@ public class SpecialisteDashboardServlet extends HttpServlet {
         List<DemandeTeleExpertise> demandes = demandeTeleExpertiseService.findAll().stream()
                 .filter(d -> d.getMedecinSpecialiste() != null
                         && d.getMedecinSpecialiste().getId() != null
-                        && d.getMedecinSpecialiste().getId().equals(user.getId()))
+                        && d.getMedecinSpecialiste().getId().equals(user.getId())
+                        && d.getStatut() == StatutExpertise.EN_ATTENTE)
                 .sorted(Comparator.comparing(
                         DemandeTeleExpertise::getDateDemande,
                         Comparator.nullsLast(Comparator.reverseOrder())))

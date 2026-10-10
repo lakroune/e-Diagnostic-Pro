@@ -49,7 +49,7 @@ public class MedecinConsultationServlet extends HttpServlet {
             return;
         }
 
-        Long patientId;
+        long patientId;
         try {
             patientId = Long.parseLong(patientIdParam);
         } catch (NumberFormatException e) {
@@ -99,7 +99,10 @@ public class MedecinConsultationServlet extends HttpServlet {
         }
 
         consultationDAO.save(consultation);
-        fileAttenteService.prendreEnCharge(patientId);
+
+        if ("cloturer".equalsIgnoreCase(action)) {
+            fileAttenteService.prendreEnCharge(patientId);
+        }
 
         if ("demander_avis_specialiste".equalsIgnoreCase(action)) {
             response.sendRedirect(request.getContextPath() + "/medecin/tele-expertise?patientId=" + patientId);

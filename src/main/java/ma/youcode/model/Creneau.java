@@ -2,6 +2,7 @@ package ma.youcode.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -70,6 +71,14 @@ public class Creneau implements Serializable {
 
     public void setDateHeureFin(LocalDateTime dateHeureFin) {
         this.dateHeureFin = dateHeureFin;
+    }
+
+    public String getHeureDebutFormatee() {
+        return dateHeureDebut != null ? dateHeureDebut.toLocalTime().format(DateTimeFormatter.ofPattern("H:mm")) : "";
+    }
+
+    public String getHeureFinFormatee() {
+        return dateHeureFin != null ? dateHeureFin.toLocalTime().format(DateTimeFormatter.ofPattern("H:mm")) : "";
     }
 
     public StatutCreneau getStatut() {

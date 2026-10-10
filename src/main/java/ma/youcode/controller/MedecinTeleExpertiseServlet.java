@@ -1,9 +1,14 @@
 package ma.youcode.controller;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -89,15 +94,21 @@ public class MedecinTeleExpertiseServlet extends HttpServlet {
                 Long selectedSpecialistId = Long.parseLong(selectedSpecialistIdParam);
                 selectedSpecialist = medecinSpecialisteService.findById(selectedSpecialistId).orElse(null);
                 if (selectedSpecialist != null) {
-                    availableSlots = selectedSpecialist.getCreneaux().stream()
-                            .filter(c -> c.getStatut() == StatutCreneau.DISPONIBLE)
-                            .filter(c -> c.getDateHeureDebut() != null && c.getDateHeureDebut().isAfter(LocalDateTime.now()))
+                    List<Creneau> creneaux = selectedSpecialist.getCreneaux() == null
+                            ? List.of()
+                            : selectedSpecialist.getCreneaux();
+
+                    availableSlots = creneaux.stream()
+                            .filter(c -> c != null && c.getStatut() == StatutCreneau.DISPONIBLE)
+                            .filter(c -> c.getDateHeureDebut() != null
+                                    && !c.getDateHeureDebut().isBefore(LocalDateTime.now()))
                             .sorted(Comparator.comparing(Creneau::getDateHeureDebut))
                             .collect(Collectors.toList());
 
-                    reservedOrOldSlots = selectedSpecialist.getCreneaux().stream()
-                            .filter(c -> c.getStatut() != StatutCreneau.DISPONIBLE
-                                    || (c.getDateHeureDebut() != null && !c.getDateHeureDebut().isAfter(LocalDateTime.now())))
+                    reservedOrOldSlots = creneaux.stream()
+                            .filter(c -> c != null && (c.getStatut() != StatutCreneau.DISPONIBLE
+                                    || (c.getDateHeureDebut() != null
+                                            && c.getDateHeureDebut().isBefore(LocalDateTime.now()))))
                             .sorted(Comparator.comparing(Creneau::getDateHeureDebut))
                             .collect(Collectors.toList());
                 }
@@ -108,6 +119,8 @@ public class MedecinTeleExpertiseServlet extends HttpServlet {
 
         request.setAttribute("patient", patientOpt.get());
         request.setAttribute("specialites", SpecialiteMedicale.values());
+        request.setAttribute("specialiteLibelles", buildSpecialiteLibelles());
+        request.setAttribute("heuresJour", buildHeuresJour());
         request.setAttribute("specialists", specialists);
         request.setAttribute("selectedSpecialite", selectedSpecialiteParam);
         request.setAttribute("selectedSpecialist", selectedSpecialist);
@@ -127,24 +140,22 @@ public class MedecinTeleExpertiseServlet extends HttpServlet {
 
         String patientIdParam = request.getParameter("patientId");
         String specialistIdParam = request.getParameter("specialisteId");
-        String creneauIdParam = request.getParameter("creneauId");
+        String heureDebutParam = request.getParameter("heureDebut");
         String question = request.getParameter("question");
         String prioriteParam = request.getParameter("priorite");
 
         if (patientIdParam == null || patientIdParam.isBlank()
                 || specialistIdParam == null || specialistIdParam.isBlank()
-                || creneauIdParam == null || creneauIdParam.isBlank()) {
+                || heureDebutParam == null || heureDebutParam.isBlank()) {
             response.sendRedirect(request.getContextPath() + "/medecin/dashboard");
             return;
         }
 
         Long patientId;
         Long specialistId;
-        Long creneauId;
         try {
             patientId = Long.parseLong(patientIdParam);
             specialistId = Long.parseLong(specialistIdParam);
-            creneauId = Long.parseLong(creneauIdParam);
         } catch (NumberFormatException e) {
             response.sendRedirect(request.getContextPath() + "/medecin/dashboard");
             return;
@@ -152,20 +163,42 @@ public class MedecinTeleExpertiseServlet extends HttpServlet {
 
         Optional<Patient> patientOpt = patientService.findById(patientId);
         Optional<MedecinSpecialiste> specialistOpt = medecinSpecialisteService.findById(specialistId);
-        Optional<Creneau> creneauOpt = creneauDAO.findById(creneauId);
 
-        if (patientOpt.isEmpty() || specialistOpt.isEmpty() || creneauOpt.isEmpty()) {
+        if (patientOpt.isEmpty() || specialistOpt.isEmpty()) {
             response.sendRedirect(request.getContextPath() + "/medecin/dashboard");
             return;
         }
 
-        Creneau creneau = creneauOpt.get();
-        if (creneau.getStatut() != StatutCreneau.DISPONIBLE
-                || creneau.getDateHeureDebut() == null
-                || !creneau.getDateHeureDebut().isAfter(LocalDateTime.now())) {
+        LocalTime heureDebut;
+        try {
+            heureDebut = LocalTime.parse(heureDebutParam);
+        } catch (Exception e) {
             response.sendRedirect(request.getContextPath() + "/medecin/tele-expertise?patientId=" + patientId);
             return;
         }
+
+        LocalDateTime debut = LocalDateTime.of(LocalDate.now(), heureDebut);
+        LocalDateTime fin = debut.plusHours(1);
+
+        boolean slotExists = creneauDAO.findAll().stream()
+                .anyMatch(c -> c.getMedecinSpecialiste() != null
+                        && c.getMedecinSpecialiste().getId() != null
+                        && c.getMedecinSpecialiste().getId().equals(specialistId)
+                        && c.getDateHeureDebut() != null
+                        && c.getDateHeureDebut().toLocalDate().equals(debut.toLocalDate())
+                        && c.getDateHeureDebut().toLocalTime().equals(debut.toLocalTime()));
+
+        if (slotExists) {
+            response.sendRedirect(request.getContextPath() + "/medecin/tele-expertise?patientId=" + patientId);
+            return;
+        }
+
+        Creneau creneau = new Creneau();
+        creneau.setMedecinSpecialiste(specialistOpt.get());
+        creneau.setDateHeureDebut(debut);
+        creneau.setDateHeureFin(fin);
+        creneau.setStatut(StatutCreneau.RESERVE);
+        creneau = creneauDAO.save(creneau);
 
         Consultation consultation = new Consultation();
         consultation.setPatient(patientOpt.get());
@@ -178,17 +211,39 @@ public class MedecinTeleExpertiseServlet extends HttpServlet {
         DemandeTeleExpertise demande = new DemandeTeleExpertise();
         demande.setDateDemande(LocalDateTime.now());
         demande.setQuestion(question);
-        demande.setDonneesAnalyses("Consultation de suivi pour le patient " + patientOpt.get().getNom() + " " + patientOpt.get().getPrenom());
+        demande.setDonneesAnalyses("Consultation de suivi pour le patient " + patientOpt.get().getNom() + " "
+                + patientOpt.get().getPrenom());
         demande.setPriorite(PrioriteExpertise.valueOf(prioriteParam != null ? prioriteParam : "NORMALE"));
         demande.setStatut(StatutExpertise.EN_ATTENTE);
         demande.setConsultation(consultation);
         demande.setMedecinSpecialiste(specialistOpt.get());
         demande.setCreneau(creneau);
 
-        creneau.setStatut(StatutCreneau.RESERVE);
-        creneauDAO.update(creneau);
         demandeTeleExpertiseDAO.save(demande);
 
         response.sendRedirect(request.getContextPath() + "/medecin/dossier/" + patientId);
+    }
+
+    private Map<String, String> buildSpecialiteLibelles() {
+        Map<String, String> libelles = new HashMap<>();
+        libelles.put("CARDIOLOGIE", "Cardiologie");
+        libelles.put("PNEUMOLOGIE", "Pneumologie");
+        libelles.put("NEUROLOGIE", "Neurologie");
+        libelles.put("GASTRO_ENTEROLOGIE", "Gastro-entérologie");
+        libelles.put("ENDOCRINOLOGIE", "Endocrinologie");
+        libelles.put("DERMATOLOGIE", "Dermatologie");
+        libelles.put("RHUMATOLOGIE", "Rhumatologie");
+        libelles.put("PSYCHIATRIE", "Psychiatrie");
+        libelles.put("NEPHROLOGIE", "Néphrologie");
+        libelles.put("ORTHOPEDIE", "Orthopédie");
+        return libelles;
+    }
+
+    private List<String> buildHeuresJour() {
+        List<String> heures = new ArrayList<>();
+        for (int heure = 0; heure < 24; heure++) {
+            heures.add(String.format("%02d:00", heure));
+        }
+        return heures;
     }
 }

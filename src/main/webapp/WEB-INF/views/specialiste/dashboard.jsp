@@ -30,12 +30,6 @@
                         <font face="Arial, Helvetica, sans-serif" size="4"><b>Dashboard Spécialiste</b></font>
                         <hr>
 
-                        <p>
-                            <font face="Arial, Helvetica, sans-serif" size="2">
-                                <a href="${pageContext.request.contextPath}/specialiste/creneau">Définir un créneau</a>
-                            </font>
-                        </p>
-
                         <c:choose>
                             <c:when test="${not empty demandes}">
                                 <table border="1" width="100%" cellpadding="6" cellspacing="0">
