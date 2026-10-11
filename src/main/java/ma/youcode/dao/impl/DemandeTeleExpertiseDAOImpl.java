@@ -36,9 +36,10 @@ public class DemandeTeleExpertiseDAOImpl implements DemandeTeleExpertiseDAO {
         try {
             DemandeTeleExpertise demande = em.createQuery(
                     "SELECT d FROM DemandeTeleExpertise d " +
-                            "LEFT JOIN FETCH d.medecinSpecialiste " +
-                            "LEFT JOIN FETCH d.consultation " +
-                            "LEFT JOIN FETCH d.creneau " +
+                            "LEFT JOIN FETCH d.medecinSpecialiste ms " +
+                            "LEFT JOIN FETCH d.consultation c " +
+                            "LEFT JOIN FETCH c.patient p " +
+                            "LEFT JOIN FETCH d.creneau cr " +
                             "WHERE d.id = :id",
                     DemandeTeleExpertise.class)
                     .setParameter("id", id)

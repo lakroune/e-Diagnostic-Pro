@@ -79,21 +79,8 @@
     </style>
 </head>
 <body>
-    <table width="100%" border="0" cellpadding="8" cellspacing="0">
-        <tr>
-            <td bgcolor="#f2f2f2" valign="middle">
-                <font face="Arial, Helvetica, sans-serif" size="2">
-                    <b>Menu Admin :</b>
-                    <a href="${pageContext.request.contextPath}/admin/dashboard">Dashboard</a>
-                    |
-                    <a href="${pageContext.request.contextPath}/admin/utilisateurs/ajouter">Ajouter un utilisateur</a>
-                    |
-                    <a href="${pageContext.request.contextPath}/logout">Déconnexion</a>
-                </font>
-            </td>
-        </tr>
-    </table>
-    <hr>
+
+    <jsp:include page="menu.jsp" />
 
     <div class="container">
         <h1>Ajouter un utilisateur</h1>

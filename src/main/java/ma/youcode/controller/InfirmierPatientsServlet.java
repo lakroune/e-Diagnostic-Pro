@@ -55,7 +55,8 @@ public class InfirmierPatientsServlet extends HttpServlet {
 
                 if (patient.isPresent()) {
                     request.setAttribute("patient", patient.get());
-                    request.getRequestDispatcher("/WEB-INF/views/infirmier/patient-detail.jsp")
+                    request.setAttribute("patients", patientService.findAll());
+                    request.getRequestDispatcher("/WEB-INF/views/infirmier/patients.jsp")
                             .forward(request, response);
                     return;
                 }
